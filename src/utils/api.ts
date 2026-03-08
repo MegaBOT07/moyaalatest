@@ -1,0 +1,57 @@
+// API Configuration
+export const API_BASE_URL = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+
+export const API_ENDPOINTS = {
+  // Health Check
+  HEALTH: `${API_BASE_URL}/api/health`,
+
+  // Products
+  PRODUCTS: `${API_BASE_URL}/api/products`,
+
+  // Videos
+  VIDEOS: `${API_BASE_URL}/api/videos`,
+
+  // Banners
+  BANNERS: `${API_BASE_URL}/api/banners`,
+
+  // Coupons
+  COUPONS: `${API_BASE_URL}/api/coupons`,
+
+  // Auth
+  AUTH: {
+    LOGIN: `${API_BASE_URL}/api/auth/login`,
+    REGISTER: `${API_BASE_URL}/api/auth/register`,
+  },
+
+  // Chat
+  CHAT: `${API_BASE_URL}/api/chat`,
+};
+
+// Helper function for API requests
+export async function apiCall(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const defaultOptions: RequestInit = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    ...options,
+  };
+
+  const response = await fetch(endpoint, defaultOptions);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'API Error' }));
+    throw new Error(error.message || `API Error: ${response.status}`);
+  }
+
+  return response;
+}
+
+// Specific API call functions for common operations
+export async function fetchJSON<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const response = await apiCall(endpoint, options);
+  return response.json() as Promise<T>;
+}
