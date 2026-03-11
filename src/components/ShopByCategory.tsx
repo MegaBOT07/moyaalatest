@@ -46,23 +46,23 @@ const ShopByCategory = () => {
         {/* Category cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <Link 
+            <Link
               key={category.name}
               to={category.link}
               className="group relative overflow-hidden rounded-2xl cursor-pointer"
             >
               {/* Card container */}
-              <div className="aspect-[4/5] relative glass-card-ruby border border-ruby-luxury/40 rounded-2xl overflow-hidden shadow-glow-ruby hover:shadow-glow transition-all duration-300">
+              <div className="aspect-square md:aspect-[4/5] relative glass-card-ruby border border-ruby-luxury/40 rounded-2xl overflow-hidden shadow-glow-ruby hover:shadow-glow transition-all duration-300">
                 {/* Background image */}
                 <img
                   src={category.image}
                   alt={category.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                
+
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/90 via-luxury-dark/30 to-transparent group-hover:from-luxury-dark/70 transition-all duration-300" />
-                
+
                 {/* Decorative corner accent */}
                 <div className="absolute top-6 right-6 w-12 h-12 border border-gold-primary/40 rounded transition-all duration-300 group-hover:border-gold-primary/80 group-hover:w-16 group-hover:h-16 group-hover:shadow-glow-gold" />
 

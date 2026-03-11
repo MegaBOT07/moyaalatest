@@ -11,13 +11,13 @@ const Footer = () => {
           <div className="col-span-1">
             <div className="mb-8">
               <div className="text-2xl luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold tracking-widest mb-2">
-                  ✨ MYRA ✨
-                </div>
-                <p className="text-platinum/70 text-sm leading-relaxed">
-                  Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
-                </p>
+                ✨ MOYAA ✨
+              </div>
+              <p className="text-platinum/70 text-sm leading-relaxed">
+                Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
+              </p>
             </div>
-            
+
             <div className="space-y-4 mb-8">
               <div className="flex items-start gap-3">
                 <span className="text-emerald-luxury text-lg">✓</span>
@@ -64,7 +64,7 @@ const Footer = () => {
             <p className="text-platinum/70 text-sm mb-6 leading-relaxed">
               Subscribe for exclusive previews, private sales, and curated collection updates.
             </p>
-            
+
             <form className="space-y-3">
               <input
                 type="email"
@@ -92,21 +92,21 @@ const Footer = () => {
               <Mail className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">EMAIL</p>
-                <p className="text-platinum text-sm">hello@myrajewelry.com</p>
+                <p className="text-platinum text-sm">moyaajewel@gmail.com</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <Phone className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">PHONE</p>
-                <p className="text-platinum text-sm">+1 (555) 123-4567</p>
+                <p className="text-platinum text-sm">+91 78779 37350</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <MapPin className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">LOCATION</p>
-                <p className="text-platinum text-sm">New York, NY 10001</p>
+                <p className="text-platinum text-sm">Pahadiya chowk, Jaipur 302002</p>
               </div>
             </div>
           </div>
@@ -117,37 +117,37 @@ const Footer = () => {
           <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-6 text-center">ACCEPTED PAYMENT METHODS</p>
           <div className="flex flex-wrap items-center justify-center gap-6 opacity-70 hover:opacity-100 transition-opacity">
             {/* Visa */}
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" 
-              alt="Visa" 
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png"
+              alt="Visa"
               className="h-6 object-contain filter brightness-0 invert"
             />
-            
+
             {/* Mastercard */}
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" 
-              alt="Mastercard" 
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png"
+              alt="Mastercard"
               className="h-6 object-contain filter brightness-0 invert"
             />
-            
+
             {/* PayPal */}
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" 
-              alt="PayPal" 
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png"
+              alt="PayPal"
               className="h-6 object-contain filter brightness-0 invert"
             />
-            
+
             {/* Google Pay */}
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png" 
-              alt="Google Pay" 
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png"
+              alt="Google Pay"
               className="h-6 object-contain filter brightness-0 invert"
             />
-            
+
             {/* Razorpay */}
-            <img 
-              src="https://razorpay.com/assets/razorpay-logo.svg" 
-              alt="Razorpay" 
+            <img
+              src="https://razorpay.com/assets/razorpay-logo.svg"
+              alt="Razorpay"
               className="h-6 object-contain filter brightness-0 invert"
             />
           </div>
@@ -156,7 +156,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-gold-primary/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-platinum/50 text-xs">
-            © 2024 MYRA Luxury Jewelry. All rights reserved.
+            © 2024 Moyaa Jewelry. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</a>

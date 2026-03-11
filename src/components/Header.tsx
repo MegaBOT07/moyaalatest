@@ -47,7 +47,7 @@ const Header = () => {
       {/* Premium announcement banner with gradient */}
       <div className="bg-gradient-to-r from-gold-primary/30 via-ruby-luxury/20 to-gold-primary/30 text-text-primary text-center py-4 text-xs tracking-widest luxury-serif border-b border-gold-primary/40 shadow-[0_0_30px_rgba(255,215,0,0.2)]">
         <span className="block sm:inline">✨ ELEVATE YOUR LUXURY • FINEST CRAFTSMANSHIP • TIMELESS ELEGANCE ✨</span>
-        <Link 
+        <Link
           to="/products"
           className="ml-3 text-gold-highlight hover:text-gold-primary transition-all duration-300 font-semibold animate-pulse"
         >
@@ -56,19 +56,16 @@ const Header = () => {
       </div>
 
       {/* Floating luxury navigation with premium styling */}
-      <header className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
-        scrollY > 100 ? 'top-4' : 'top-8'
-      }`}>
-        <nav className="glass-card px-8 py-4 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl">
+      <header className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${scrollY > 100 ? 'top-4' : 'top-8'
+        }`}>
+        <nav className="glass-card px-6 py-1.5 sm:py-2 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl">
           <div className="flex items-center gap-8">
             {/* Logo with luxury styling */}
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center gap-2 pr-4 border-r border-gold-primary/30 hover:text-gold-primary transition-all duration-300 group"
             >
-              <div className="text-xl luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-highlight tracking-widest group-hover:drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
-                ✨ MYRA ✨
-              </div>
+              <img src="/logo.png" alt="Logo" className="h-[3.5rem] sm:h-[4.5rem] w-auto object-contain max-w-[180px] sm:max-w-[240px]" />
             </Link>
 
             {/* Hamburger menu button */}
@@ -89,7 +86,7 @@ const Header = () => {
                 HOME
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gold-primary to-ruby-luxury group-hover:w-full transition-all duration-300" />
               </Link>
-              
+
               {/* Collections Dropdown */}
               <div className="relative group">
                 <button className="flex items-center gap-1 text-platinum text-xs luxury-serif tracking-widest hover:text-gold-primary transition-all duration-300">
@@ -97,7 +94,7 @@ const Header = () => {
                   <ChevronDown className="h-3 w-3 group-hover:text-gold-primary transition-all" />
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gold-primary to-ruby-luxury group-hover:w-full transition-all duration-300" />
                 </button>
-                
+
                 {/* Dropdown Menu */}
                 <div className="absolute top-full left-0 mt-2 w-48 glass-card-emerald shadow-glow-emerald rounded-lg p-3 border border-emerald-luxury/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                   <Link
@@ -126,7 +123,7 @@ const Header = () => {
                   </Link>
                 </div>
               </div>
-              
+
               <Link
                 to="/track-order"
                 className="text-platinum text-xs luxury-serif tracking-widest hover:text-gold-primary transition-all duration-300 relative group"
@@ -134,7 +131,7 @@ const Header = () => {
                 TRACK ORDER
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gold-primary to-ruby-luxury group-hover:w-full transition-all duration-300" />
               </Link>
-              
+
               <Link
                 to="/contact"
                 className="text-platinum text-xs luxury-serif tracking-widest hover:text-gold-primary transition-all duration-300 relative group"
@@ -153,9 +150,9 @@ const Header = () => {
                 <span>SHOP</span>
                 <ChevronDown className="h-3 w-3" />
               </button>
-              
+
               {isShopByOpen && (
-                <div className="absolute top-full right-0 mt-2 w-40 glass-card-emerald shadow-glow-emerald rounded-lg p-2 border border-emerald-luxury/40">
+                <div className="absolute top-full right-0 mt-2 w-48 sm:w-40 glass-card-emerald shadow-glow-emerald rounded-lg p-2 border border-emerald-luxury/40 z-50">
                   <Link
                     to="/earrings"
                     className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
@@ -183,7 +180,7 @@ const Header = () => {
 
             {/* User actions with jewel tone accents */}
             <div className="flex items-center gap-6 pl-4 border-l border-gold-primary/30">
-              <button 
+              <button
                 onClick={() => setIsSearchOpen(true)}
                 className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow"
                 title="Search"
@@ -201,7 +198,7 @@ const Header = () => {
                   <div className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-emerald-luxury rounded-full animate-pulse" />
                 )}
               </button>
-              
+
               <button
                 onClick={() => setIsWishlistOpen(true)}
                 className="text-platinum hover:text-ruby-luxury transition-all duration-300 hover-ruby-glow relative"
@@ -214,7 +211,7 @@ const Header = () => {
                   </span>
                 )}
               </button>
-              
+
               <button
                 onClick={() => setIsCartOpen(true)}
                 className="text-platinum hover:text-gold-primary transition-all duration-300 hover-gold-glow relative"
@@ -243,22 +240,19 @@ const Header = () => {
 
       {/* Sidebar Navigation Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-screen w-72 glass-card shadow-premium border-r border-gold-primary/40 z-50 transform transition-transform duration-300 overflow-y-auto ${
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      <div className={`fixed top-0 left-0 h-screen w-72 glass-card shadow-premium border-r border-gold-primary/40 z-50 transform transition-transform duration-300 overflow-y-auto ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
         <div className="p-6">
           {/* Sidebar Header */}
           <div className="flex items-center justify-between mb-8 pb-6 border-b border-gold-primary/30">
-            <div className="text-lg luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-highlight tracking-widest">
-              ✨ MYRA ✨
-            </div>
+            <img src="/logo.png" alt="Logo" className="h-16 sm:h-20 w-auto object-contain max-w-[240px]" />
             <button
               onClick={() => setIsSidebarOpen(false)}
               className="text-platinum hover:text-gold-primary transition-all"
@@ -313,7 +307,7 @@ const Header = () => {
                 SIGN IN
               </button>
             )}
-            
+
             <Link
               to="/track-order"
               onClick={() => setIsSidebarOpen(false)}

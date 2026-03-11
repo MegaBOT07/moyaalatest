@@ -77,7 +77,7 @@ const Hero = () => {
       ))}
 
       {/* Main hero content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center">
         {/* Left text block */}
         <div className="flex flex-col justify-center space-y-8">
           <div>
@@ -107,7 +107,7 @@ const Hero = () => {
 
         {/* Center spotlight product */}
         <div className="flex justify-center lg:justify-center">
-          <div className="relative w-80 h-80 flex items-center justify-center">
+          <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center max-w-full">
             {/* Outer glow (dark chocolate + teal depth) */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-b from-dark-chocolate/40 via-deep-teal/10 to-transparent blur-3xl" />
 
@@ -117,7 +117,7 @@ const Hero = () => {
             <div className="absolute inset-24 rounded-full border border-gold-primary/10" />
 
             {/* Spotlight product image container */}
-            <div className="relative z-10 w-72 h-72 rounded-full overflow-hidden border-2 border-gold-primary/40 shadow-glow bg-luxury-dark/40 backdrop-blur-sm flex items-center justify-center animate-float">
+            <div className="relative z-10 w-56 h-56 sm:w-72 sm:h-72 rounded-full overflow-hidden border-2 border-gold-primary/40 shadow-glow bg-luxury-dark/40 backdrop-blur-sm flex items-center justify-center animate-float">
               <img
                 src="https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=600"
                 alt="Featured Necklace"
@@ -129,8 +129,8 @@ const Hero = () => {
 
               {/* Badge */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-dark-chocolate/70 backdrop-blur-md border border-gold-primary/50 rounded-full px-6 py-3 z-20">
-                  <p className="text-platinum text-sm luxury-serif">Featured Piece</p>
-                </div>
+                <p className="text-platinum text-sm luxury-serif">Featured Piece</p>
+              </div>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ const Hero = () => {
             <div className="flex items-start gap-4 mb-4">
               <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src="https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src="/earrings.png"
                   alt="Earrings"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -170,7 +170,7 @@ const Hero = () => {
             <div className="flex items-start gap-4 mb-4">
               <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src="https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src="/nacklace.jpeg"
                   alt="Necklaces"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -195,7 +195,7 @@ const Hero = () => {
             <div className="flex items-start gap-4 mb-4">
               <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src="https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src="/bracalate.png"
                   alt="Bracelets"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />

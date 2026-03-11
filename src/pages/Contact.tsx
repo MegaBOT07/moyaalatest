@@ -32,7 +32,7 @@ const Contact = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-6 luxury-serif">CONTACT US</h1>
           <p className="text-xl text-platinum/80 leading-relaxed">
-            We'd love to hear from you. Get in touch with our team for any questions, 
+            We'd love to hear from you. Get in touch with our team for any questions,
             custom orders, or jewelry consultations.
           </p>
         </div>
@@ -45,8 +45,8 @@ const Contact = () => {
             <div>
               <h2 className="text-3xl font-bold text-gold-primary mb-6 luxury-serif">Get In Touch</h2>
               <p className="text-platinum/70 text-lg leading-relaxed mb-8">
-                Whether you have questions about our jewelry collection, need assistance with an order, 
-                or want to discuss custom designs, our team is here to help. Reach out to us through 
+                Whether you have questions about our jewelry collection, need assistance with an order,
+                or want to discuss custom designs, our team is here to help. Reach out to us through
                 any of the channels below.
               </p>
             </div>
@@ -58,8 +58,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gold-primary mb-1">Email Us</h3>
-                  <p className="text-platinum/70">radiantreflection.customercare@gmail.com</p>
-                  <p className="text-platinum/70">support@radiantreflection.com</p>
+                  <p className="text-platinum/70">moyaajewel@gmail.com</p>
                 </div>
               </div>
 
@@ -68,9 +67,8 @@ const Contact = () => {
                   <Phone className="h-6 w-6 text-platinum" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-emerald-luxury mb-1">Call Us</h3>
-                  <p className="text-platinum/70">+91 98765 43210</p>
-                  <p className="text-platinum/70">+91 87654 32109</p>
+                  <p className="text-platinum/70">+91 78779 37350</p>
+                  <p className="text-platinum/70">+91 80940 51710</p>
                 </div>
               </div>
 
@@ -81,9 +79,9 @@ const Contact = () => {
                 <div>
                   <h3 className="text-lg font-semibold text-ruby-luxury mb-1">Visit Our Store</h3>
                   <p className="text-platinum/70">
-                    123 Jewelry District<br />
-                    Mumbai, Maharashtra 400001<br />
-                    India
+                    455, four gate out side mandhi khatikan<br />
+                    Pahadiya chowk, near chota shiv tample<br />
+                    Pincode- 302002
                   </p>
                 </div>
               </div>
@@ -133,7 +131,7 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="glass-card-sapphire border border-sapphire-luxury/40 p-8 rounded-lg shadow-glow-sapphire">
             <h2 className="text-2xl font-bold text-gold-primary mb-6 luxury-serif">Send Us a Message</h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -151,7 +149,7 @@ const Contact = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-platinum mb-2">
                     Email Address *
