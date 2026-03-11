@@ -12,17 +12,12 @@ const Admin = () => {
 
   const stats = [
     { name: 'Total Products', value: state.products.length, icon: Package, color: 'bg-blue-500' },
-    { name: 'Total Orders', value: '156', icon: ShoppingBag, color: 'bg-green-500' },
-    { name: 'Total Customers', value: '89', icon: Users, color: 'bg-purple-500' },
-    { name: 'Revenue', value: '₹2,45,670', icon: TrendingUp, color: 'bg-brand' },
+    { name: 'Total Orders', value: '0', icon: ShoppingBag, color: 'bg-green-500' },
+    { name: 'Total Customers', value: '0', icon: Users, color: 'bg-purple-500' },
+    { name: 'Revenue', value: '₹0', icon: TrendingUp, color: 'bg-brand' },
   ];
 
-  const recentOrders = [
-    { id: 'ORD001', customer: 'Priya Sharma', product: 'Cherish Earring', amount: '₹799', status: 'Completed' },
-    { id: 'ORD002', customer: 'Rahul Kumar', product: 'Nova Kada', amount: '₹999', status: 'Processing' },
-    { id: 'ORD003', customer: 'Anita Singh', product: 'Classic Snake Necklace', amount: '₹1,299', status: 'Shipped' },
-    { id: 'ORD004', customer: 'Vikram Patel', product: 'Bold Bloom Earring', amount: '₹599', status: 'Pending' },
-  ];
+  const recentOrders: any[] = [];
 
   const ProductForm = () => (
     <div className="glass-card-sapphire border border-sapphire-luxury/40 p-6 rounded-lg shadow-glow-sapphire">
@@ -148,20 +143,20 @@ const Admin = () => {
     return (
       <div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-          <input 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            placeholder="Title" 
-            className="p-2 bg-luxury-secondary border border-emerald-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-emerald-luxury/60 outline-none" 
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            className="p-2 bg-luxury-secondary border border-emerald-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-emerald-luxury/60 outline-none"
           />
-          <input 
-            value={url} 
-            onChange={(e) => setUrl(e.target.value)} 
-            placeholder="Video URL" 
-            className="p-2 bg-luxury-secondary border border-emerald-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-emerald-luxury/60 outline-none" 
+          <input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Video URL"
+            className="p-2 bg-luxury-secondary border border-emerald-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-emerald-luxury/60 outline-none"
           />
-          <button 
-            onClick={addVideo} 
+          <button
+            onClick={addVideo}
             className="btn-premium-gold text-luxury-dark px-4 rounded hover:shadow-glow-gold transition-all"
           >
             Add Video
@@ -176,7 +171,7 @@ const Admin = () => {
               </div>
               <div className="flex space-x-2">
                 <a href={v.url} target="_blank" rel="noreferrer" className="text-gold-primary hover:text-rose-gold transition-colors">Open</a>
-                <button 
+                <button
                   onClick={async () => {
                     try {
                       const videoAny = v as any;
@@ -186,7 +181,7 @@ const Admin = () => {
                     } catch (e) {
                       dispatch({ type: 'REMOVE_VIDEO', payload: v.id });
                     }
-                  }} 
+                  }}
                   className="text-ruby-luxury hover:text-rose-gold transition-colors"
                 >
                   Delete
@@ -242,16 +237,16 @@ const Admin = () => {
           <h3 className="text-lg font-bold text-platinum mb-4">Edit Product</h3>
           <form onSubmit={submit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.name || ''} 
-                onChange={e => setForm({...form, name: e.target.value})} 
+              <input
+                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                value={form.name || ''}
+                onChange={e => setForm({ ...form, name: e.target.value })}
                 placeholder="Product name"
               />
-              <select 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.category || ''} 
-                onChange={e => setForm({...form, category: e.target.value})}
+              <select
+                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                value={form.category || ''}
+                onChange={e => setForm({ ...form, category: e.target.value })}
               >
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
@@ -259,47 +254,47 @@ const Admin = () => {
               </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.price || 0} 
-                onChange={e => setForm({...form, price: e.target.value})} 
+              <input
+                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                value={form.price || 0}
+                onChange={e => setForm({ ...form, price: e.target.value })}
                 placeholder="Price"
               />
-              <input 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.originalPrice || ''} 
-                onChange={e => setForm({...form, originalPrice: e.target.value})} 
+              <input
+                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                value={form.originalPrice || ''}
+                onChange={e => setForm({ ...form, originalPrice: e.target.value })}
                 placeholder="Original price"
               />
             </div>
-            <textarea 
-              className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-              rows={4} 
-              value={form.description || ''} 
-              onChange={e => setForm({...form, description: e.target.value})} 
+            <textarea
+              className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+              rows={4}
+              value={form.description || ''}
+              onChange={e => setForm({ ...form, description: e.target.value })}
               placeholder="Description"
             />
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2 text-platinum cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={!!form.soldOut} 
-                  onChange={e => setForm({...form, soldOut: e.target.checked})} 
+                <input
+                  type="checkbox"
+                  checked={!!form.soldOut}
+                  onChange={e => setForm({ ...form, soldOut: e.target.checked })}
                   className="rounded border-sapphire-luxury accent-gold-primary"
-                /> 
+                />
                 <span>Sold Out</span>
               </label>
             </div>
             <div className="flex justify-end space-x-2">
-              <button 
-                type="button" 
-                onClick={() => { setShowEditModal(false); setEditProduct(null); }} 
+              <button
+                type="button"
+                onClick={() => { setShowEditModal(false); setEditProduct(null); }}
                 className="px-4 py-2 bg-luxury-secondary text-platinum rounded border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="px-4 py-2 btn-premium-gold text-luxury-dark rounded hover:shadow-glow-gold transition-all"
               >
                 Save
@@ -332,15 +327,15 @@ const Admin = () => {
     return (
       <div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-          <input 
-            value={text} 
-            onChange={(e) => setText(e.target.value)} 
-            placeholder="Banner text" 
-            className="p-2 bg-luxury-secondary border border-ruby-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-ruby-luxury/60 outline-none col-span-3" 
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Banner text"
+            className="p-2 bg-luxury-secondary border border-ruby-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-ruby-luxury/60 outline-none col-span-3"
           />
-          <select 
-            value={type} 
-            onChange={(e) => setType(e.target.value as any)} 
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as any)}
             className="p-2 bg-luxury-secondary border border-ruby-luxury/30 rounded text-platinum focus:ring-2 focus:ring-ruby-luxury/60 outline-none"
           >
             <option value="info">Info</option>
@@ -350,8 +345,8 @@ const Admin = () => {
           </select>
         </div>
         <div className="flex space-x-2 mb-4">
-          <button 
-            onClick={addBanner} 
+          <button
+            onClick={addBanner}
             className="btn-premium-gold text-luxury-dark px-4 rounded hover:shadow-glow-gold transition-all"
           >
             Add Banner
@@ -365,33 +360,33 @@ const Admin = () => {
                 <div className="text-sm text-platinum/60">{b.type}</div>
               </div>
               <div className="flex space-x-2">
-                <button 
+                <button
                   onClick={() => {
                     if (i === 0) return;
                     const next = [...state.banners];
-                    const tmp = next[i-1];
-                    next[i-1] = next[i];
+                    const tmp = next[i - 1];
+                    next[i - 1] = next[i];
                     next[i] = tmp;
                     dispatch({ type: 'SET_BANNERS', payload: next });
-                  }} 
+                  }}
                   className="text-gold-primary hover:text-rose-gold transition-colors"
                 >
                   Up
                 </button>
-                <button 
+                <button
                   onClick={() => {
                     if (i === state.banners.length - 1) return;
                     const next = [...state.banners];
-                    const tmp = next[i+1];
-                    next[i+1] = next[i];
+                    const tmp = next[i + 1];
+                    next[i + 1] = next[i];
                     next[i] = tmp;
                     dispatch({ type: 'SET_BANNERS', payload: next });
-                  }} 
+                  }}
                   className="text-gold-primary hover:text-rose-gold transition-colors"
                 >
                   Down
                 </button>
-                <button 
+                <button
                   onClick={async () => {
                     try {
                       const bannerAny = b as any;
@@ -401,7 +396,7 @@ const Admin = () => {
                     } catch (e) {
                       dispatch({ type: 'REMOVE_BANNER', payload: b.id });
                     }
-                  }} 
+                  }}
                   className="text-ruby-luxury hover:text-rose-gold transition-colors"
                 >
                   Delete
@@ -503,11 +498,10 @@ const Admin = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-2 px-1 font-medium text-sm transition-all ${
-                  activeTab === tab.id
+                className={`py-2 px-1 font-medium text-sm transition-all ${activeTab === tab.id
                     ? 'border-b-2 border-gold-primary text-gold-primary'
                     : 'text-platinum/60 hover:text-gold-primary'
-                }`}
+                  }`}
               >
                 {tab.name}
               </button>
@@ -523,12 +517,11 @@ const Admin = () => {
               {stats.map((stat) => (
                 <div key={stat.name} className="glass-card-emerald border border-emerald-luxury/40 p-6 rounded-lg shadow-glow-emerald">
                   <div className="flex items-center">
-                    <div className={`bg-gradient-to-r ${
-                      stat.name === 'Total Products' ? 'from-emerald-luxury to-sapphire-luxury' :
-                      stat.name === 'Total Orders' ? 'from-gold-primary to-rose-gold' :
-                      stat.name === 'Total Customers' ? 'from-ruby-luxury to-amethyst-luxury' :
-                      'from-sapphire-luxury to-emerald-luxury'
-                    } p-3 rounded-lg shadow-glow`}>
+                    <div className={`bg-gradient-to-r ${stat.name === 'Total Products' ? 'from-emerald-luxury to-sapphire-luxury' :
+                        stat.name === 'Total Orders' ? 'from-gold-primary to-rose-gold' :
+                          stat.name === 'Total Customers' ? 'from-ruby-luxury to-amethyst-luxury' :
+                            'from-sapphire-luxury to-emerald-luxury'
+                      } p-3 rounded-lg shadow-glow`}>
                       <stat.icon className="h-6 w-6 text-platinum" />
                     </div>
                     <div className="ml-4">
@@ -583,12 +576,11 @@ const Admin = () => {
                           {order.amount}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
-                            order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                            order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
-                            'bg-luxury-secondary text-platinum/70'
-                          }`}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
+                              order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
+                                order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
+                                  'bg-luxury-secondary text-platinum/70'
+                            }`}>
                             {order.status}
                           </span>
                         </td>
@@ -661,9 +653,8 @@ const Admin = () => {
                           ₹{product.price.toLocaleString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            product.soldOut ? 'bg-gradient-to-r from-ruby-luxury to-amethyst-luxury text-platinum' : 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum'
-                          }`}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${product.soldOut ? 'bg-gradient-to-r from-ruby-luxury to-amethyst-luxury text-platinum' : 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum'
+                            }`}>
                             {product.soldOut ? 'Sold Out' : 'In Stock'}
                           </span>
                         </td>
@@ -774,12 +765,11 @@ const Admin = () => {
                         {order.amount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
-                          order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                          order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
-                          'bg-luxury-secondary text-platinum/70'
-                        }`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
+                            order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
+                              order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
+                                'bg-luxury-secondary text-platinum/70'
+                          }`}>
                           {order.status}
                         </span>
                       </td>
