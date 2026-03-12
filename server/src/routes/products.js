@@ -38,11 +38,13 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', upload.array('image'), async (req, res) => {
   try {
     const body = { ...req.body };
-    if (req.file) {
-      body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    if (req.files && req.files.length > 0) {
+      const imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      body.images = imageUrls;
+      body.image = imageUrls[0]; // Set first image as primary
     }
     const p = new Product(body);
     await p.save();
@@ -53,11 +55,13 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', upload.array('image'), async (req, res) => {
   try {
     const body = { ...req.body };
-    if (req.file) {
-      body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    if (req.files && req.files.length > 0) {
+      const imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+      body.images = imageUrls;
+      body.image = imageUrls[0]; // Set first image as primary
     }
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });

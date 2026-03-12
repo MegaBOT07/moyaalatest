@@ -19,105 +19,127 @@ const Admin = () => {
 
   const recentOrders: any[] = [];
 
-  const ProductForm = () => (
-    <div className="glass-card-sapphire border border-sapphire-luxury/40 p-6 rounded-lg shadow-glow-sapphire">
-      <h3 className="text-lg font-bold text-platinum mb-4">Add New Product</h3>
-      <form className="space-y-4" onSubmit={async (e) => {
-        e.preventDefault();
-        const form = e.target as HTMLFormElement;
-        const fd = new FormData(form);
-        try {
-          const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
-          if (!res.ok) throw new Error('Create failed');
-          const created = await res.json();
-          dispatch({ type: 'ADD_PRODUCT', payload: created });
-        } catch (err) {
-          // fallback to local add
-          const fdobj: any = {};
-          fd.forEach((v, k) => { fdobj[k] = v; });
-          const newId = Math.max(0, ...state.products.map(p => p.id)) + 1;
-          const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '' } as any;
-          dispatch({ type: 'ADD_PRODUCT', payload: newProduct });
-        }
-        setShowAddProduct(false);
-      }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  const ProductForm = () => {
+    const [previewImages, setPreviewImages] = useState<string[]>([]);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      const previews = files.map(file => URL.createObjectURL(file));
+      setPreviewImages(previews);
+    };
+
+    return (
+      <div className="glass-card-sapphire border border-sapphire-luxury/40 p-6 rounded-lg shadow-glow-sapphire">
+        <h3 className="text-lg font-bold text-platinum mb-4">Add New Product</h3>
+        <form className="space-y-4" onSubmit={async (e) => {
+          e.preventDefault();
+          const form = e.target as HTMLFormElement;
+          const fd = new FormData(form);
+          try {
+            const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
+            if (!res.ok) throw new Error('Create failed');
+            const created = await res.json();
+            dispatch({ type: 'ADD_PRODUCT', payload: created });
+          } catch (err) {
+            // fallback to local add
+            const fdobj: any = {};
+            fd.forEach((v, k) => { fdobj[k] = v; });
+            const newId = Math.max(0, ...state.products.map(p => p.id)) + 1;
+            const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '' } as any;
+            dispatch({ type: 'ADD_PRODUCT', payload: newProduct });
+          }
+          setShowAddProduct(false);
+          setPreviewImages([]);
+        }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Product Name</label>
+              <input
+                name="name"
+                type="text"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                placeholder="Enter product name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Category</label>
+              <select name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
+                <option value="">Select category</option>
+                <option value="earrings">Earrings</option>
+                <option value="bracelets">Bracelets</option>
+                <option value="necklaces">Necklaces</option>
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
+              <input
+                name="price"
+                type="number"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                placeholder="0"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
+              <input
+                name="originalPrice"
+                type="number"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                placeholder="0"
+              />
+            </div>
+          </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Product Name</label>
-            <input
-              name="name"
-              type="text"
+            <label className="block text-sm font-medium text-platinum mb-2">Description</label>
+            <textarea
+              name="description"
+              rows={4}
               className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-              placeholder="Enter product name"
+              placeholder="Enter product description"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Category</label>
-            <select name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
-              <option value="">Select category</option>
-              <option value="earrings">Earrings</option>
-              <option value="bracelets">Bracelets</option>
-              <option value="necklaces">Necklaces</option>
-            </select>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
+            <label className="block text-sm font-medium text-platinum mb-2">Product Images (Multiple)</label>
             <input
-              name="price"
-              type="number"
+              name="image"
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
               className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-              placeholder="0"
             />
+            {previewImages.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm text-platinum/70 mb-2">Selected images ({previewImages.length}):</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {previewImages.map((preview, idx) => (
+                    <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-sapphire-luxury/40" />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
-            <input
-              name="originalPrice"
-              type="number"
-              className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-              placeholder="0"
-            />
+          <div className="flex space-x-4">
+            <button
+              type="submit"
+              className="btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow-gold transition-all"
+            >
+              Add Product
+            </button>
+            <button
+              type="button"
+              onClick={() => { setShowAddProduct(false); setPreviewImages([]); }}
+              className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
+            >
+              Cancel
+            </button>
           </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-platinum mb-2">Description</label>
-          <textarea
-            name="description"
-            rows={4}
-            className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-            placeholder="Enter product description"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-platinum mb-2">Product Images</label>
-          <input
-            name="image"
-            type="file"
-            multiple
-            accept="image/*"
-            className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-          />
-        </div>
-        <div className="flex space-x-4">
-          <button
-            type="submit"
-            className="btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow-gold transition-all"
-          >
-            Add Product
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowAddProduct(false)}
-            className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+        </form>
+      </div>
+    );
+  };
 
   const VideoManager: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -196,10 +218,20 @@ const Admin = () => {
 
   const EditProductModal: React.FC = () => {
     const [form, setForm] = useState<any>(editProduct || {});
+    const [previewImages, setPreviewImages] = useState<string[]>([]);
 
-    React.useEffect(() => setForm(editProduct || {}), [editProduct]);
+    React.useEffect(() => {
+      setForm(editProduct || {});
+      setPreviewImages([]);
+    }, [editProduct]);
 
     if (!showEditModal || !form) return null;
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      const previews = files.map(file => URL.createObjectURL(file));
+      setPreviewImages(previews);
+    };
 
     const submit = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -207,8 +239,17 @@ const Admin = () => {
         const fd = new FormData();
         // include fields from form state
         Object.keys(form).forEach(k => {
-          if (form[k] !== undefined && form[k] !== null) fd.append(k, form[k]);
+          if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image') fd.append(k, form[k]);
         });
+        
+        // Handle image upload if new images were selected
+        const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"]') as HTMLInputElement;
+        if (fileInput?.files?.length) {
+          Array.from(fileInput.files).forEach(file => {
+            fd.append('image', file);
+          });
+        }
+        
         const url = `${API_ENDPOINTS.PRODUCTS}/${form.id}`;
         const res = await fetch(url, { method: 'PUT', body: fd });
         if (!res.ok) throw new Error('Update failed');
@@ -229,11 +270,12 @@ const Admin = () => {
       }
       setShowEditModal(false);
       setEditProduct(null);
+      setPreviewImages([]);
     };
 
     return (
-      <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-sapphire">
+      <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto">
+        <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-sapphire my-8">
           <h3 className="text-lg font-bold text-platinum mb-4">Edit Product</h3>
           <form onSubmit={submit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -274,6 +316,38 @@ const Admin = () => {
               onChange={e => setForm({ ...form, description: e.target.value })}
               placeholder="Description"
             />
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Current Images</label>
+              {(form.images && form.images.length > 0) ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                  {form.images.map((img: string, idx: number) => (
+                    <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-sapphire-luxury/40" />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-platinum/50 mb-3">No images yet</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Update Images (Multiple)</label>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+              />
+              {previewImages.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-sm text-platinum/70 mb-2">New images ({previewImages.length}):</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {previewImages.map((preview, idx) => (
+                      <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-emerald-luxury/40" />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2 text-platinum cursor-pointer">
                 <input
@@ -288,7 +362,7 @@ const Admin = () => {
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
-                onClick={() => { setShowEditModal(false); setEditProduct(null); }}
+                onClick={() => { setShowEditModal(false); setEditProduct(null); setPreviewImages([]); }}
                 className="px-4 py-2 bg-luxury-secondary text-platinum rounded border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
               >
                 Cancel
