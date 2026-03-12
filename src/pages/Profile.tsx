@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, User, Heart, ShoppingBag, Package } from 'lucide-react';
+import { LogOut, User, Heart, ShoppingBag, Package, Mail } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 
 interface Order {
@@ -66,23 +66,25 @@ const Profile = () => {
   }
 
   return (
-    <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto bg-white min-h-screen">
       {/* Profile Header */}
       <div className="mb-12">
-        <div className="bg-gradient-to-r from-luxury-secondary to-luxury-tertiary border border-gold-primary/40 rounded-lg p-8 shadow-lg">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-gold-primary to-rose-gold rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-luxury-dark" />
-            </div>
-            <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-3xl luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-2">
-                Welcome, {state.user.name}!
-              </h1>
-              <p className="text-platinum/70 text-sm">Member since {new Date().getFullYear()}</p>
+        <div className="bg-white border-b-2 border-neutral-200 pb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center">
+                <User className="w-7 h-7 text-neutral-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-neutral-900">
+                  {state.user.name}
+                </h1>
+                <p className="text-neutral-500 text-sm mt-1">Member since {new Date().getFullYear()}</p>
+              </div>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-6 py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-lg transition-all duration-300"
+              className="flex items-center gap-2 px-5 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg transition-all duration-300 font-medium"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
@@ -93,7 +95,7 @@ const Profile = () => {
 
       {/* Tabs */}
       <div className="mb-8">
-        <div className="flex flex-wrap gap-4 border-b border-gold-primary/20 pb-4">
+        <div className="flex flex-wrap gap-2 border-b border-neutral-200">
           {[
             { id: 'details', label: 'Account Details', icon: User },
             { id: 'orders', label: 'Orders', icon: Package },
@@ -105,10 +107,10 @@ const Profile = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 luxury-serif text-sm tracking-widest ${
+                className={`flex items-center gap-2 px-5 py-3 text-sm font-medium transition-all duration-300 border-b-2 ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark'
-                    : 'text-platinum/70 hover:text-gold-primary border border-gold-primary/20 hover:border-gold-primary/40'
+                    ? 'border-neutral-900 text-neutral-900'
+                    : 'border-transparent text-neutral-500 hover:text-neutral-700'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -121,25 +123,27 @@ const Profile = () => {
 
       {/* Account Details Tab */}
       {activeTab === 'details' && (
-        <div className="bg-luxury-secondary border border-gold-primary/40 rounded-lg p-8 shadow-lg">
-          <h2 className="text-2xl luxury-serif text-gold-primary tracking-widest mb-8">Account Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-luxury-tertiary/50 p-6 rounded-lg border border-gold-primary/20">
-              <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-2 block">Full Name</label>
-              <p className="text-platinum text-lg font-semibold">{state.user.name}</p>
+        <div className="bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 bg-neutral-50 rounded-lg border border-neutral-200">
+              <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-2 block">Full Name</label>
+              <p className="text-neutral-900 text-lg font-semibold">{state.user.name}</p>
             </div>
-            <div className="bg-luxury-tertiary/50 p-6 rounded-lg border border-gold-primary/20">
-              <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-2 block">Email Address</label>
-              <p className="text-platinum text-lg font-semibold">{state.user.email}</p>
+            <div className="p-6 bg-neutral-50 rounded-lg border border-neutral-200 flex items-start gap-3">
+              <Mail className="w-4 h-4 text-neutral-500 mt-4" />
+              <div className="flex-1">
+                <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-2 block">Email Address</label>
+                <p className="text-neutral-900 text-lg font-semibold break-all">{state.user.email}</p>
+              </div>
             </div>
-            <div className="bg-luxury-tertiary/50 p-6 rounded-lg border border-gold-primary/20">
-              <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-2 block">Total Orders</label>
-              <p className="text-platinum text-lg font-semibold">{orders.length}</p>
+            <div className="p-6 bg-neutral-50 rounded-lg border border-neutral-200">
+              <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-2 block">Total Orders</label>
+              <p className="text-neutral-900 text-lg font-semibold">{orders.length}</p>
             </div>
-            <div className="bg-luxury-tertiary/50 p-6 rounded-lg border border-gold-primary/20">
-              <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-2 block">Member Status</label>
-              <p className="text-emerald-luxury text-lg font-semibold flex items-center gap-2">
-                <span className="w-2 h-2 bg-emerald-luxury rounded-full"></span>
+            <div className="p-6 bg-neutral-50 rounded-lg border border-neutral-200">
+              <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-2 block">Account Status</label>
+              <p className="text-green-600 text-lg font-semibold flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-600 rounded-full"></span>
                 Active
               </p>
             </div>
@@ -149,100 +153,96 @@ const Profile = () => {
 
       {/* Orders Tab */}
       {activeTab === 'orders' && (
-        <div className="bg-luxury-secondary border border-gold-primary/40 rounded-lg p-8 shadow-lg">
-          <h2 className="text-2xl luxury-serif text-gold-primary tracking-widest mb-8">Your Orders</h2>
-          {orders.length === 0 ? (
-            <div className="text-center py-12">
-              <Package className="w-16 h-16 text-platinum/30 mx-auto mb-4" />
-              <p className="text-platinum/70">No orders yet. Start shopping now!</p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {orders.map(order => (
-                <div key={order.id} className="border border-gold-primary/20 rounded-lg p-6 hover:border-gold-primary/40 transition-all duration-300">
+        <div className="bg-white">
+          <div className="space-y-4">
+            {orders.length === 0 ? (
+              <div className="text-center py-16 bg-neutral-50 rounded-lg border border-neutral-200">
+                <Package className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
+                <p className="text-neutral-500">No orders yet. Start shopping now!</p>
+              </div>
+            ) : (
+              orders.map(order => (
+                <div key={order.id} className="border border-neutral-200 rounded-lg p-6 hover:border-neutral-300 hover:shadow-sm transition-all">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                      <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-1 block">Order ID</label>
-                      <p className="text-platinum font-mono">{order.id}</p>
+                      <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-1 block">Order ID</label>
+                      <p className="text-neutral-900 font-mono text-sm">{order.id}</p>
                     </div>
                     <div>
-                      <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-1 block">Date</label>
-                      <p className="text-platinum">{order.date}</p>
+                      <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-1 block">Date</label>
+                      <p className="text-neutral-900">{order.date}</p>
                     </div>
                     <div>
-                      <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-1 block">Total</label>
-                      <p className="text-gold-primary font-semibold">₹{order.total.toLocaleString()}</p>
+                      <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-1 block">Total</label>
+                      <p className="text-neutral-900 font-semibold">₹{order.total.toLocaleString()}</p>
                     </div>
                     <div>
-                      <label className="text-platinum/50 text-xs luxury-serif tracking-widest mb-1 block">Status</label>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        order.status === 'Delivered' ? 'bg-emerald-luxury/20 text-emerald-luxury' :
-                        order.status === 'Processing' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-yellow-500/20 text-yellow-400'
+                      <label className="text-neutral-500 text-xs font-semibold uppercase tracking-wide mb-1 block">Status</label>
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                        order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+                        order.status === 'Processing' ? 'bg-blue-100 text-blue-700' :
+                        'bg-yellow-100 text-yellow-700'
                       }`}>
                         {order.status}
                       </span>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       )}
 
       {/* Cart Tab */}
       {activeTab === 'cart' && (
-        <div className="bg-luxury-secondary border border-gold-primary/40 rounded-lg p-8 shadow-lg">
-          <h2 className="text-2xl luxury-serif text-gold-primary tracking-widest mb-8">Shopping Cart</h2>
+        <div className="bg-white">
           {state.cart.length === 0 ? (
-            <div className="text-center py-12">
-              <ShoppingBag className="w-16 h-16 text-platinum/30 mx-auto mb-4" />
-              <p className="text-platinum/70 mb-6">Your cart is empty</p>
+            <div className="text-center py-16 bg-neutral-50 rounded-lg border border-neutral-200">
+              <ShoppingBag className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
+              <p className="text-neutral-500 mb-6">Your cart is empty</p>
               <button
                 onClick={() => navigate('/products')}
-                className="px-6 py-3 bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark rounded-lg font-semibold hover:shadow-glow transition-all duration-300"
+                className="px-6 py-2.5 bg-neutral-900 text-white rounded-lg font-medium hover:bg-neutral-800 transition-all"
               >
                 Continue Shopping
               </button>
             </div>
           ) : (
             <>
-              <div className="space-y-6 mb-8">
+              <div className="space-y-4 mb-8">
                 {state.cart.map(item => (
-                  <div key={item.id} className="border border-gold-primary/20 rounded-lg p-6 hover:border-gold-primary/40 transition-all duration-300">
-                    <div className="flex gap-6">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-24 h-24 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <h3 className="text-platinum font-semibold text-lg mb-2">{item.name}</h3>
-                        <p className="text-gold-primary mb-4">₹{item.price.toLocaleString()}</p>
-                        <div className="flex items-center gap-4">
-                          <span className="text-platinum/70">Qty: {item.quantity}</span>
-                          <span className="text-rose-gold font-semibold">₹{(item.price * item.quantity).toLocaleString()}</span>
-                        </div>
+                  <div key={item.id} className="border border-neutral-200 rounded-lg p-5 flex gap-5 hover:border-neutral-300 hover:shadow-sm transition-all">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-24 h-24 object-cover rounded-lg bg-neutral-100"
+                    />
+                    <div className="flex-1">
+                      <h3 className="text-neutral-900 font-semibold text-base mb-2">{item.name}</h3>
+                      <p className="text-neutral-600 mb-3">₹{item.price.toLocaleString()}</p>
+                      <div className="flex items-center gap-4 text-sm">
+                        <span className="text-neutral-600">Qty: {item.quantity}</span>
+                        <span className="text-neutral-900 font-semibold">₹{(item.price * item.quantity).toLocaleString()}</span>
                       </div>
-                      <button
-                        onClick={() => handleRemoveFromCart(item.id)}
-                        className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-lg transition-all duration-300 h-fit"
-                      >
-                        Remove
-                      </button>
                     </div>
+                    <button
+                      onClick={() => handleRemoveFromCart(item.id)}
+                      className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg transition-all font-medium text-sm h-fit"
+                    >
+                      Remove
+                    </button>
                   </div>
                 ))}
               </div>
-              <div className="bg-luxury-tertiary/50 border border-gold-primary/20 rounded-lg p-6">
+              <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-platinum/70 text-lg">Subtotal:</span>
-                  <span className="text-gold-primary text-2xl font-semibold">₹{cartTotal.toLocaleString()}</span>
+                  <span className="text-neutral-600 text-lg">Subtotal:</span>
+                  <span className="text-neutral-900 text-2xl font-bold">₹{cartTotal.toLocaleString()}</span>
                 </div>
                 <button
                   onClick={() => navigate('/checkout')}
-                  className="w-full py-4 bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark rounded-lg font-semibold hover:shadow-glow transition-all duration-300"
+                  className="w-full py-3 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 transition-all"
                 >
                   Proceed to Checkout
                 </button>
@@ -254,39 +254,38 @@ const Profile = () => {
 
       {/* Wishlist Tab */}
       {activeTab === 'wishlist' && (
-        <div className="bg-luxury-secondary border border-gold-primary/40 rounded-lg p-8 shadow-lg">
-          <h2 className="text-2xl luxury-serif text-gold-primary tracking-widest mb-8">Wishlist</h2>
+        <div className="bg-white">
           {state.wishlist.length === 0 ? (
-            <div className="text-center py-12">
-              <Heart className="w-16 h-16 text-platinum/30 mx-auto mb-4" />
-              <p className="text-platinum/70">Your wishlist is empty</p>
+            <div className="text-center py-16 bg-neutral-50 rounded-lg border border-neutral-200">
+              <Heart className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
+              <p className="text-neutral-500">Your wishlist is empty</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {state.wishlist.map(item => (
-                <div key={item.id} className="bg-luxury-tertiary border border-gold-primary/20 rounded-lg overflow-hidden hover:border-gold-primary/40 transition-all duration-300">
+                <div key={item.id} className="bg-white border border-neutral-200 rounded-lg overflow-hidden hover:border-neutral-300 hover:shadow-md transition-all">
                   <div className="relative">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-48 object-cover bg-neutral-100"
                     />
                     <button
                       onClick={() => handleRemoveFromWishlist(item.id)}
-                      className="absolute top-3 right-3 p-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-lg transition-all duration-300"
+                      className="absolute top-3 right-3 p-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg transition-all"
                     >
                       <Heart className="w-4 h-4 fill-current" />
                     </button>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-platinum font-semibold mb-2 line-clamp-2">{item.name}</h3>
-                    <p className="text-gold-primary font-semibold mb-4">₹{item.price.toLocaleString()}</p>
+                  <div className="p-5">
+                    <h3 className="text-neutral-900 font-semibold mb-2 line-clamp-2">{item.name}</h3>
+                    <p className="text-neutral-900 font-bold mb-4">₹{item.price.toLocaleString()}</p>
                     <button
                       onClick={() => {
                         handleAddToCart(item);
                         handleRemoveFromWishlist(item.id);
                       }}
-                      className="w-full py-2 bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark rounded-lg font-semibold hover:shadow-glow transition-all duration-300"
+                      className="w-full py-2 bg-neutral-900 text-white rounded-lg font-medium hover:bg-neutral-800 transition-all text-sm"
                     >
                       Add to Cart
                     </button>
