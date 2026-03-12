@@ -251,6 +251,13 @@ const Header = () => {
                   <div className="font-semibold mb-1">Signed in as:</div>
                   <div className="text-gold-primary">{state.user.name}</div>
                 </div>
+                <Link
+                  to="/profile"
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="block px-4 py-3 text-platinum text-sm luxury-serif tracking-widest hover:text-gold-primary hover:bg-emerald-luxury/10 rounded transition-all duration-300 text-left"
+                >
+                  MY PROFILE
+                </Link>
                 <button
                   onClick={() => {
                     dispatch({ type: 'LOGOUT' });
