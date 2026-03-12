@@ -58,7 +58,7 @@ const Header = () => {
       {/* Floating luxury navigation with premium styling */}
       <header className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-[calc(100vw-1.5rem)] sm:w-auto max-w-[calc(100vw-1.5rem)] sm:max-w-none ${scrollY > 100 ? 'top-4' : 'top-8'
         }`}>
-        <nav className="glass-card px-3 sm:px-6 py-1.5 sm:py-2 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl overflow-hidden">
+        <nav className="glass-card px-3 sm:px-6 py-1.5 sm:py-2 rounded-full shadow-premium border border-gold-primary/40 bg-luxury-dark/60 backdrop-blur-2xl">
           <div className="flex items-center gap-2 sm:gap-4 lg:gap-8">
             {/* Logo with luxury styling */}
             <Link
@@ -96,7 +96,8 @@ const Header = () => {
                 </button>
 
                 {/* Dropdown Menu */}
-                <div className="absolute top-full left-0 mt-2 w-48 glass-card-emerald shadow-glow-emerald rounded-lg p-3 border border-emerald-luxury/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="absolute top-full left-0 pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                  <div className="glass-card-emerald shadow-glow-emerald rounded-lg p-3 border border-emerald-luxury/40">
                   <Link
                     to="/products"
                     className="block px-4 py-3 text-xs text-platinum hover:text-gold-primary hover:bg-emerald-luxury/20 rounded transition-all duration-300"
@@ -121,6 +122,7 @@ const Header = () => {
                   >
                     ✨ Necklaces
                   </Link>
+                  </div>
                 </div>
               </div>
 
@@ -153,6 +155,13 @@ const Header = () => {
 
               {isShopByOpen && (
                 <div className="absolute top-full right-0 mt-2 w-48 sm:w-40 glass-card-emerald shadow-glow-emerald rounded-lg p-2 border border-emerald-luxury/40 z-50">
+                  <Link
+                    to="/products"
+                    className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
+                    onClick={() => setIsShopByOpen(false)}
+                  >
+                    All Products
+                  </Link>
                   <Link
                     to="/earrings"
                     className="block px-4 py-3 text-xs text-platinum hover:text-golden hover:bg-emerald-luxury/20 rounded transition-all duration-300"
