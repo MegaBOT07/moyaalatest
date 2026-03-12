@@ -13,11 +13,8 @@ const Footer = () => {
               <img 
                 src="/logo.png" 
                 alt="MORAA Logo" 
-                className="h-16 w-auto mb-4 object-contain"
+                className="h-24 w-auto mb-6 object-contain"
               />
-              <div className="text-2xl luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold tracking-widest mb-2">
-                ✨ MORAA ✨
-              </div>
               <p className="text-platinum/70 text-sm leading-relaxed">
                 Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
               </p>
