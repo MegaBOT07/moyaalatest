@@ -97,17 +97,19 @@ const Admin = () => {
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Product Name</label>
+              <label htmlFor="product-name" className="block text-sm font-medium text-platinum mb-2">Product Name</label>
               <input
+                id="product-name"
                 name="name"
                 type="text"
+                autoComplete="off"
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
                 placeholder="Enter product name"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Category</label>
-              <select name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
+              <label htmlFor="product-category" className="block text-sm font-medium text-platinum mb-2">Category</label>
+              <select id="product-category" name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
                 <option value="">Select category</option>
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
@@ -117,19 +119,23 @@ const Admin = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
+              <label htmlFor="product-price" className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
               <input
+                id="product-price"
                 name="price"
                 type="number"
+                autoComplete="off"
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
                 placeholder="0"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
+              <label htmlFor="product-original-price" className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
               <input
+                id="product-original-price"
                 name="originalPrice"
                 type="number"
+                autoComplete="off"
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
                 placeholder="0"
               />
