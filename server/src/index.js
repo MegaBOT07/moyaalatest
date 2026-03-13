@@ -43,11 +43,17 @@ app.use('/api/chat', chatRouter);
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-app.get('/', (req, res) => {
-  res.json({ message: 'RRJEWEL API Server', status: 'running', version: '1.0.0' });
-});
+// Serve frontend static files (built React app)
+const distPath = path.join(__dirname, '..', '..', 'dist');
+app.use(express.static(distPath));
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
+
+// Catch-all: serve index.html for client-side routing (must be LAST)
+// Only serve index.html if the file doesn't exist (for non-API routes)
+app.use((req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 const PORT = process.env.PORT || 5000;
 
