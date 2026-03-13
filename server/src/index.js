@@ -53,6 +53,17 @@ app.use(express.static(distPath));
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
+// Debug endpoint to check MongoDB connection
+app.get('/api/debug/db', (req, res) => {
+  const mongoUri = process.env.MONGO_URI || 'mongodb+srv://mohitlalwani1907:i070OBftf3M5kzus@cluster0.tzkp3vg.mongodb.net/rrjewel?retryWrites=true&w=majority';
+  const maskedUri = mongoUri.replace(/\/\/.*:.*@/, '//***:***@');
+  res.json({ 
+    mongoUri: maskedUri,
+    connected: mongoose.connection.readyState === 1,
+    dbName: mongoose.connection.db?.s?.client?.s?.namespace?.db || 'unknown'
+  });
+});
+
 // Catch-all: serve index.html for client-side routing (must be LAST)
 // Only serve index.html if the file doesn't exist (for non-API routes)
 app.use((req, res) => {
