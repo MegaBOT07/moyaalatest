@@ -22,7 +22,9 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
+    console.log('GET /api/products - Fetching products from MongoDB...');
     const items = await Product.find().sort({ createdAt: -1 });
+    console.log(`GET /api/products - Found ${items.length} products`);
     res.json(items || []);
   } catch (err) {
     console.error('GET /api/products error:', err.message);

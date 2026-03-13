@@ -73,7 +73,12 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 
 const mongoUri = process.env.MONGO_URI || 'mongodb+srv://mohitlalwani1907:i070OBftf3M5kzus@cluster0.tzkp3vg.mongodb.net/rrjewel?retryWrites=true&w=majority';
-console.log('Connecting to MongoDB:', mongoUri.replace(/\/\/.*:.*@/, '//***:***@'));
+const maskedUri = mongoUri.replace(/\/\/.*:.*@/, '//***:***@');
+console.log('📌 Environment Check:');
+console.log('  NODE_ENV:', process.env.NODE_ENV);
+console.log('  MONGO_URI set:', !!process.env.MONGO_URI);
+console.log('  MongoDB:', maskedUri);
+console.log('Connecting to MongoDB:', maskedUri);
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
