@@ -428,6 +428,7 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
+          </div>
         </div>
 
         {/* Customer Reviews Section */}
