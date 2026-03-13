@@ -18,5 +18,13 @@ const ProductSchema = new mongoose.Schema({
   careInstructions: [String]
 }, { timestamps: true });
 
+// Transform _id to id when converting to JSON
+ProductSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    ret.id = ret._id;
+    return ret;
+  }
+});
+
 const Product = mongoose.model('Product', ProductSchema);
 export default Product;

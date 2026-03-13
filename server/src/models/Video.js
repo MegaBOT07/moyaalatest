@@ -8,5 +8,13 @@ const VideoSchema = new mongoose.Schema({
   thumbnail: String
 }, { timestamps: true });
 
+// Transform _id to id when converting to JSON
+VideoSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    ret.id = ret._id;
+    return ret;
+  }
+});
+
 const Video = mongoose.model('Video', VideoSchema);
 export default Video;

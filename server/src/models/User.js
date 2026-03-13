@@ -7,4 +7,13 @@ const UserSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
 }, { timestamps: true });
 
+// Transform _id to id when converting to JSON
+UserSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    ret.id = ret._id;
+    delete ret.passwordHash; // Don't expose password hash
+    return ret;
+  }
+});
+
 export default mongoose.model('User', UserSchema);
