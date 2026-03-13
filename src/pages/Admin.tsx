@@ -78,14 +78,24 @@ const Admin = () => {
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
-            if (!res.ok) throw new Error('Create failed');
+            if (!res.ok) {
+              let message = 'Create failed';
+              try {
+                const payload = await res.json();
+                message = payload?.error || payload?.message || message;
+              } catch {
+                // Keep fallback message if response is not JSON
+              }
+              throw new Error(message);
+            }
             const created = await res.json();
             dispatch({ type: 'ADD_PRODUCT', payload: created });
             alert('✅ Product added successfully!');
           } catch (err) {
             console.error('API error:', err);
-            alert('❌ Error adding product: Backend server not responding. Make sure your MongoDB is running on Render.');
-            setError('Failed to add product. Please check your backend connection.');
+            const message = err instanceof Error ? err.message : 'Failed to add product';
+            alert(`❌ Error adding product: ${message}`);
+            setError(message);
           } finally {
             setIsLoading(false);
           }
