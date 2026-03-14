@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showAddProduct, setShowAddProduct] = useState(false);
   const { state, dispatch } = useAppContext();
@@ -236,16 +238,32 @@ const Admin = () => {
               />
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
-              <input
-                type="checkbox"
-                checked={soldOut}
-                onChange={e => setSoldOut(e.target.checked)}
-                className="rounded border-sapphire-luxury accent-gold-primary"
-              />
-              <span>Sold Out</span>
-            </label>
+          <div className="flex items-center space-x-6">
+            <fieldset className="text-platinum">
+              <legend className="text-sm font-medium mb-2 block">Availability</legend>
+              <div className="flex items-center space-x-4">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="availability"
+                    checked={!soldOut}
+                    onChange={() => setSoldOut(false)}
+                    className="w-4 h-4 accent-emerald-luxury"
+                  />
+                  <span className="text-emerald-luxury font-semibold">✓ In Stock</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="availability"
+                    checked={soldOut}
+                    onChange={() => setSoldOut(true)}
+                    className="w-4 h-4 accent-ruby-luxury"
+                  />
+                  <span className="text-ruby-luxury font-semibold">✗ Out of Stock</span>
+                </label>
+              </div>
+            </fieldset>
           </div>
           <div className="flex space-x-4">
             <button
@@ -978,10 +996,8 @@ const Admin = () => {
                             </button>
                             <button
                               onClick={() => {
-                                console.log('Edit clicked for product:', product);
-                                setEditProduct(product);
-                                setShowEditModal(true);
-                                console.log('showEditModal set to true');
+                                const productId = (product as any)._id || product.id;
+                                navigate(`/admin/edit-product/${productId}`);
                               }}
                               className="text-sapphire-luxury hover:text-emerald-luxury transition-colors"
                             >

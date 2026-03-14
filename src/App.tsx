@@ -14,6 +14,7 @@ import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import ProductDetail from './pages/ProductDetail';
 import Admin from './pages/Admin';
+import EditProduct from './pages/EditProduct';
 import Profile from './pages/Profile';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
@@ -38,6 +39,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/edit-product/:id" element={<EditProduct />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
