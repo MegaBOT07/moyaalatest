@@ -342,13 +342,20 @@ const Admin = () => {
     const [videoUrls, setVideoUrls] = useState<string[]>([]);
 
     React.useEffect(() => {
-      setForm(editProduct || {});
-      setPreviewImages([]);
-      setVideoFiles([]);
-      setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
+      if (editProduct) {
+        console.log('EditProductModal: editProduct updated:', editProduct);
+        setForm(editProduct);
+        setPreviewImages([]);
+        setVideoFiles([]);
+        setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
+      }
     }, [editProduct]);
 
-    if (!showEditModal || !form) return null;
+    if (!showEditModal || !editProduct) {
+      console.log('EditProductModal: Not rendering - showEditModal:', showEditModal, 'editProduct:', editProduct);
+      return null;
+    }
+    console.log('EditProductModal: Rendering modal for product');
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
@@ -945,8 +952,10 @@ const Admin = () => {
                             </button>
                             <button
                               onClick={() => {
+                                console.log('Edit clicked for product:', product);
                                 setEditProduct(product);
                                 setShowEditModal(true);
+                                console.log('showEditModal set to true');
                               }}
                               className="text-sapphire-luxury hover:text-emerald-luxury transition-colors"
                             >
