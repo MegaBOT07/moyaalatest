@@ -26,6 +26,7 @@ const Admin = () => {
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [soldOut, setSoldOut] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
@@ -76,6 +77,9 @@ const Admin = () => {
             fd.append('videos', JSON.stringify(finalVideos));
           }
           
+          // Explicitly add soldOut value
+          fd.append('soldOut', soldOut ? 'true' : 'false');
+          
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
             if (!res.ok) {
@@ -104,6 +108,7 @@ const Admin = () => {
           setPreviewImages([]);
           setVideoFiles([]);
           setVideoUrls(['', '']);
+          setSoldOut(false);
         }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -231,6 +236,17 @@ const Admin = () => {
               />
             </div>
           </div>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+              <input
+                type="checkbox"
+                checked={soldOut}
+                onChange={e => setSoldOut(e.target.checked)}
+                className="rounded border-sapphire-luxury accent-gold-primary"
+              />
+              <span>Sold Out</span>
+            </label>
+          </div>
           <div className="flex space-x-4">
             <button
               type="submit"
@@ -248,6 +264,7 @@ const Admin = () => {
                 setPreviewImages([]); 
                 setVideoFiles([]); 
                 setVideoUrls(['', '']); 
+                setSoldOut(false);
                 setError('');
               }}
               className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all disabled:opacity-50 disabled:cursor-not-allowed"
@@ -336,17 +353,15 @@ const Admin = () => {
   };
 
   const EditProductModal: React.FC = () => {
-    // Use editProduct directly if available, otherwise use form state
-    const [form, setForm] = useState<any>({});
+    const [localForm, setLocalForm] = useState<any>(null);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [videoFiles, setVideoFiles] = useState<File[]>([]);
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
 
+    // Sync localForm whenever editProduct or showEditModal changes
     React.useEffect(() => {
-      console.log('EditProductModal useEffect triggered. showEditModal:', showEditModal, 'editProduct:', editProduct?.name);
       if (showEditModal && editProduct) {
-        console.log('Setting form data for product:', editProduct.name);
-        const formData = {
+        setLocalForm({
           id: editProduct.id || editProduct._id,
           name: editProduct.name || '',
           category: editProduct.category || '',
@@ -356,25 +371,16 @@ const Admin = () => {
           soldOut: editProduct.soldOut || false,
           images: editProduct.images || [],
           videos: editProduct.videos || []
-        };
-        setForm(formData);
-        setPreviewImages([]);
-        setVideoFiles([]);
+        });
         setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
+      } else {
+        setLocalForm(null);
       }
     }, [showEditModal, editProduct]);
 
-    if (!showEditModal) {
-      console.log('Modal not visible - showEditModal is false');
+    if (!showEditModal || !localForm) {
       return null;
     }
-
-    if (!editProduct) {
-      console.log('Modal not visible - editProduct is null/undefined');
-      return null;
-    }
-
-    console.log('Rendering EditProductModal with product:', form?.name, 'form:', form);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
@@ -392,8 +398,8 @@ const Admin = () => {
       try {
         const fd = new FormData();
         // include fields from form state
-        Object.keys(form).forEach(k => {
-          if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') fd.append(k, form[k]);
+        Object.keys(localForm).forEach(k => {
+          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') fd.append(k, localForm[k]);
         });
         
         // Handle video files
@@ -421,21 +427,21 @@ const Admin = () => {
           });
         }
         
-        const url = `${API_ENDPOINTS.PRODUCTS}/${form.id}`;
+        const url = `${API_ENDPOINTS.PRODUCTS}/${localForm.id}`;
         const res = await fetch(url, { method: 'PUT', body: fd });
         if (!res.ok) throw new Error('Update failed');
         const updated = await res.json();
         dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
       } catch (err) {
         const updated = {
-          ...form,
-          id: form.id,
-          name: form.name,
-          category: form.category,
-          price: Number(form.price) || 0,
-          originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-          description: form.description || '',
-          soldOut: !!form.soldOut,
+          ...localForm,
+          id: localForm.id,
+          name: localForm.name,
+          category: localForm.category,
+          price: Number(localForm.price) || 0,
+          originalPrice: localForm.originalPrice ? Number(localForm.originalPrice) : undefined,
+          description: localForm.description || '',
+          soldOut: !!localForm.soldOut,
         };
         dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
       }
@@ -447,20 +453,20 @@ const Admin = () => {
     return (
       <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto">
         <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-sapphire my-8">
-          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product - {editProduct?.name || 'Loading...'}</h3>
+          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product - {localForm?.name || 'Loading...'}</h3>
           <form onSubmit={submit} className="space-y-4">
-            <p className="text-xs text-platinum/50">Product ID: {editProduct?.id || editProduct?._id}</p>
+            <p className="text-xs text-platinum/50">Product ID: {localForm?.id || localForm?._id}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
-                value={form.name || ''}
-                onChange={e => setForm({ ...form, name: e.target.value })}
+                value={localForm?.name || ''}
+                onChange={e => setLocalForm({ ...localForm, name: e.target.value })}
                 placeholder="Product name"
               />
               <select
                 className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
-                value={form.category || ''}
-                onChange={e => setForm({ ...form, category: e.target.value })}
+                value={localForm?.category || ''}
+                onChange={e => setLocalForm({ ...localForm, category: e.target.value })}
               >
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
@@ -470,29 +476,29 @@ const Admin = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
-                value={form.price || 0}
-                onChange={e => setForm({ ...form, price: e.target.value })}
+                value={localForm?.price || 0}
+                onChange={e => setLocalForm({ ...localForm, price: e.target.value })}
                 placeholder="Price"
               />
               <input
                 className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
-                value={form.originalPrice || ''}
-                onChange={e => setForm({ ...form, originalPrice: e.target.value })}
+                value={localForm?.originalPrice || ''}
+                onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
                 placeholder="Original price"
               />
             </div>
             <textarea
               className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
               rows={4}
-              value={form.description || ''}
-              onChange={e => setForm({ ...form, description: e.target.value })}
+              value={localForm?.description || ''}
+              onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
               placeholder="Description"
             />
             <div>
               <label className="block text-sm font-medium text-platinum mb-2">Current Images</label>
-              {(form.images && form.images.length > 0) ? (
+              {(localForm?.images && localForm.images.length > 0) ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
-                  {form.images.map((img: string, idx: number) => (
+                  {localForm.images.map((img: string, idx: number) => (
                     <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-sapphire-luxury/40" />
                   ))}
                 </div>
@@ -525,11 +531,11 @@ const Admin = () => {
               <p className="text-xs text-platinum/60 mb-3">Upload video files OR paste URLs</p>
               
               {/* Current Videos */}
-              {(form.videos && form.videos.length > 0) && (
+              {(localForm?.videos && localForm.videos.length > 0) && (
                 <div className="mb-4">
                   <p className="text-sm text-platinum/80 mb-2">Current Videos:</p>
                   <div className="space-y-1">
-                    {form.videos.map((vid: string, idx: number) => (
+                    {localForm.videos.map((vid: string, idx: number) => (
                       <p key={idx} className="text-xs text-gold-primary">✓ {vid.substring(0, 50)}...</p>
                     ))}
                   </div>
@@ -586,8 +592,8 @@ const Admin = () => {
               <label className="flex items-center space-x-2 text-platinum cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={!!form.soldOut}
-                  onChange={e => setForm({ ...form, soldOut: e.target.checked })}
+                  checked={!!localForm?.soldOut}
+                  onChange={e => setLocalForm({ ...localForm, soldOut: e.target.checked })}
                   className="rounded border-sapphire-luxury accent-gold-primary"
                 />
                 <span>Sold Out</span>
