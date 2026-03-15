@@ -26,6 +26,7 @@ const Admin = () => {
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [videoFiles, setVideoFiles] = useState<File[]>([]);
     const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
+    const [soldOut, setSoldOut] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -72,11 +73,15 @@ const Admin = () => {
           });
           
           // Collect video URLs (only non-empty ones)
+          // Collect video URLs (only non-empty ones)
           const validUrls = videoUrls.filter(url => url.trim());
           if (validUrls.length > 0 || videoFiles.length > 0) {
             const finalVideos = [...validUrls, ...videoFiles.map((_, i) => `__file_${i}__`)];
             fd.append('videos', JSON.stringify(finalVideos));
           }
+
+          // Add soldOut status
+          fd.append('soldOut', String(soldOut));
           
           try {
             const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
@@ -233,6 +238,17 @@ const Admin = () => {
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
               />
             </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+              <input
+                type="checkbox"
+                checked={soldOut}
+                onChange={e => setSoldOut(e.target.checked)}
+                className="rounded border-sapphire-luxury accent-gold-primary"
+              />
+              <span>Sold Out</span>
+            </label>
           </div>
           <div className="flex space-x-4">
             <button
@@ -395,7 +411,7 @@ const Admin = () => {
         });
         
         // Handle videos (URLs and file placeholders)
-        let finalVideos = [];
+        let finalVideos: string[] = [];
         if (videoUrls && videoUrls.length > 0) {
           finalVideos = videoUrls.filter(url => url && url.trim());
         }
@@ -951,6 +967,11 @@ const Admin = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gold-primary font-medium">
                           ₹{product.price.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${product.soldOut ? 'bg-red-500/20 text-red-300 border border-red-500/50' : 'bg-emerald-luxury/20 text-emerald-luxury border border-emerald-luxury/50'}`}>
+                            {product.soldOut ? 'Sold Out' : 'Available'}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">

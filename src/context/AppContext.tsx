@@ -18,6 +18,8 @@ export interface Product {
   dimensions?: string;
   weight?: string;
   careInstructions?: string[];
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export interface Video {

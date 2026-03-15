@@ -1,0 +1,1 @@
+﻿src/pages/AllProducts.tsx(188,24): error TS18048: 'product.averageRating' is possibly 'undefined'.

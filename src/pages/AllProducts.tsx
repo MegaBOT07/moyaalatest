@@ -185,8 +185,8 @@ const AllProducts = () => {
                       </div>
 
                       {/* Rating if available */}
-                      {product.averageRating > 0 && (
-                        <p className="text-xs text-gold-primary mt-1">⭐ {product.averageRating} ({product.reviewCount} reviews)</p>
+                      {product.averageRating !== undefined && product.averageRating > 0 && (
+                        <p className="text-xs text-gold-primary mt-1">⭐ {product.averageRating} ({product.reviewCount || 0} reviews)</p>
                       )}
                     </div>
                   </Link>

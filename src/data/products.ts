@@ -6,6 +6,7 @@ export interface Product {
   image: string;
   images?: string[];
   sale?: boolean;
+  soldOut?: boolean;
   category: string;
   description: string;
   features: string[];
@@ -13,6 +14,8 @@ export interface Product {
   dimensions?: string;
   weight?: string;
   careInstructions: string[];
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export const products: Product[] = [

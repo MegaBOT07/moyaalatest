@@ -15,6 +15,7 @@ const EditProduct = () => {
     price: 0,
     originalPrice: '',
     description: '',
+    soldOut: false,
     images: [],
     videos: []
   });
@@ -39,6 +40,7 @@ const EditProduct = () => {
         price: product.price || 0,
         originalPrice: product.originalPrice || '',
         description: product.description || '',
+        soldOut: productAny.soldOut || false,
         images: product.images || [],
         videos: productAny.videos || []
       });
@@ -69,7 +71,7 @@ const EditProduct = () => {
       
       // Add form fields
       Object.keys(form).forEach(k => {
-        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'soldOut' && k !== 'stock') {
+        if (form[k] !== undefined && form[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos' && k !== 'stock') {
           fd.append(k, form[k]);
         }
       });
@@ -325,6 +327,18 @@ const EditProduct = () => {
                 className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
               />
             </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+              <input
+                type="checkbox"
+                checked={!!form.soldOut}
+                onChange={e => setForm({ ...form, soldOut: e.target.checked })}
+                className="rounded border-sapphire-luxury accent-gold-primary"
+              />
+              <span>Sold Out</span>
+            </label>
           </div>
 
           {/* Buttons */}
