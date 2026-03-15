@@ -5,16 +5,15 @@
 export const getImageUrl = (imageUrl: string | undefined): string => {
   if (!imageUrl) return 'https://via.placeholder.com/400?text=No+Image';
   
-  // If it's already a full URL, return as-is
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+  // If it's already a full URL or Base64 data, return as-is
+  if (imageUrl.startsWith('http') || imageUrl.startsWith('data:')) {
     return imageUrl;
   }
   
-  // If it's a file path, construct the full URL
+  // Backwards compatibility for relative paths if any remain
   if (imageUrl.startsWith('/uploads/')) {
     const baseUrl = import.meta.env.VITE_API_BASE ?? 
       (import.meta.env.DEV ? 'http://localhost:5000' : 'https://moyaa.onrender.com');
-    // Ensure we don't double up slashes
     const cleanUrl = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
     return `${baseUrl}${cleanUrl}`;
   }

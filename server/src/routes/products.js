@@ -5,11 +5,9 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-import { storage } from '../config/cloudinary.js';
-
 const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for videos
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit for images
 });
 
 const router = express.Router();
@@ -71,22 +69,28 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
       }
     }
     
-    // Handle image uploads
+    // Handle image uploads - Convert to Base64
     if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => file.path); // Cloudinary provides full URL in file.path
+      const imageUrls = req.files.image.map(file => {
+        const b64 = file.buffer.toString('base64');
+        return `data:${file.mimetype};base64,${b64}`;
+      });
       body.images = imageUrls;
-      body.image = imageUrls[0]; // Set first image as primary
-      console.log('Images uploaded to Cloudinary:', imageUrls);
+      body.image = imageUrls[0];
+      console.log('Images converted to Base64 and stored in MongoDB');
     }
     
     // Handle video uploads and URLs
     let videos = [];
     
-    // Add uploaded video files
+    // Add uploaded video files - Convert to Base64
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => file.path);
+      const videoUrls = req.files.videos_file.map(file => {
+        const b64 = file.buffer.toString('base64');
+        return `data:${file.mimetype};base64,${b64}`;
+      });
       videos = [...videos, ...videoUrls];
-      console.log('Videos uploaded to Cloudinary:', videoUrls);
+      console.log('Videos converted to Base64 and stored in MongoDB');
     }
     
     // Parse and add video URLs from request body
@@ -157,22 +161,26 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
       }
     }
     
-    // Handle image uploads
+    // Handle image uploads - Convert to Base64
     if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => file.path);
+      const imageUrls = req.files.image.map(file => {
+        const b64 = file.buffer.toString('base64');
+        return `data:${file.mimetype};base64,${b64}`;
+      });
       body.images = imageUrls;
-      body.image = imageUrls[0]; // Set first image as primary
-      console.log('Images updated on Cloudinary:', imageUrls);
+      body.image = imageUrls[0];
     }
     
     // Handle video uploads and URLs
     let videos = [];
     
-    // Add uploaded video files
+    // Add uploaded video files - Convert to Base64
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => file.path);
+      const videoUrls = req.files.videos_file.map(file => {
+        const b64 = file.buffer.toString('base64');
+        return `data:${file.mimetype};base64,${b64}`;
+      });
       videos = [...videos, ...videoUrls];
-      console.log('Videos updated on Cloudinary:', videoUrls);
     }
     
     // Parse and add video URLs from request body

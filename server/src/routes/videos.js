@@ -5,9 +5,7 @@ import path from 'path';
 
 const router = express.Router();
 
-import { storage } from '../config/cloudinary.js';
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', async (req, res) => {
   try {
@@ -34,7 +32,8 @@ router.post('/', upload.single('file'), async (req, res) => {
   try {
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = req.file.path;
+      const b64 = req.file.buffer.toString('base64');
+      body.url = `data:${req.file.mimetype};base64,${b64}`;
       body.title = body.title || req.file.originalname;
     }
     const v = new Video(body);
@@ -50,7 +49,8 @@ router.put('/:id', upload.single('file'), async (req, res) => {
   try {
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = req.file.path;
+      const b64 = req.file.buffer.toString('base64');
+      body.url = `data:${req.file.mimetype};base64,${b64}`;
     }
     const updated = await Video.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });
