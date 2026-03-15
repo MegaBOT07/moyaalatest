@@ -14,7 +14,9 @@ export const getImageUrl = (imageUrl: string | undefined): string => {
   if (imageUrl.startsWith('/uploads/')) {
     const baseUrl = import.meta.env.VITE_API_BASE ?? 
       (import.meta.env.DEV ? 'http://localhost:5000' : 'https://moyaa.onrender.com');
-    return `${baseUrl}${imageUrl}`;
+    // Ensure we don't double up slashes
+    const cleanUrl = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+    return `${baseUrl}${cleanUrl}`;
   }
   
   // Otherwise treat as relative path

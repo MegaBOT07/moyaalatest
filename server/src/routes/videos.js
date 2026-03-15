@@ -5,17 +5,9 @@ import path from 'path';
 
 const router = express.Router();
 
-const uploadDir = path.join(path.resolve(), 'server', 'uploads');
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    cb(null, `${Date.now()}-${Math.random().toString(36).substr(2,6)}${ext}`);
-  }
-});
-const upload = multer({ storage });
+import { storage } from '../config/cloudinary.js';
+
+const upload = multer({ storage: storage });
 
 router.get('/', async (req, res) => {
   try {
@@ -40,10 +32,9 @@ router.get('/featured', async (req, res) => {
 // Accept multipart form with optional file field 'file' or JSON body { title, url }
 router.post('/', upload.single('file'), async (req, res) => {
   try {
-    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = `${backendUrl}/uploads/${req.file.filename}`;
+      body.url = req.file.path;
       body.title = body.title || req.file.originalname;
     }
     const v = new Video(body);
@@ -57,10 +48,9 @@ router.post('/', upload.single('file'), async (req, res) => {
 
 router.put('/:id', upload.single('file'), async (req, res) => {
   try {
-    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
     const body = { ...(req.body || {}) };
     if (req.file) {
-      body.url = `${backendUrl}/uploads/${req.file.filename}`;
+      body.url = req.file.path;
     }
     const updated = await Video.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });

@@ -5,25 +5,10 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadDir = path.join(__dirname, '..', '..', 'uploads');
+import { storage } from '../config/cloudinary.js';
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    cb(null, `${Date.now()}-${Math.random().toString(36).substr(2,6)}${ext}`);
-  }
-});
 const upload = multer({ 
-  storage,
+  storage: storage,
   limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for videos
 });
 
@@ -88,10 +73,10 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
+      const imageUrls = req.files.image.map(file => file.path); // Cloudinary provides full URL in file.path
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
-      console.log('Images uploaded:', imageUrls);
+      console.log('Images uploaded to Cloudinary:', imageUrls);
     }
     
     // Handle video uploads and URLs
@@ -99,9 +84,9 @@ router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos
     
     // Add uploaded video files
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => `${backendUrl}/uploads/${file.filename}`);
+      const videoUrls = req.files.videos_file.map(file => file.path);
       videos = [...videos, ...videoUrls];
-      console.log('Videos uploaded:', videoUrls);
+      console.log('Videos uploaded to Cloudinary:', videoUrls);
     }
     
     // Parse and add video URLs from request body
@@ -174,9 +159,10 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
     
     // Handle image uploads
     if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => `${backendUrl}/uploads/${file.filename}`);
+      const imageUrls = req.files.image.map(file => file.path);
       body.images = imageUrls;
       body.image = imageUrls[0]; // Set first image as primary
+      console.log('Images updated on Cloudinary:', imageUrls);
     }
     
     // Handle video uploads and URLs
@@ -184,8 +170,9 @@ router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'vide
     
     // Add uploaded video files
     if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => `${backendUrl}/uploads/${file.filename}`);
+      const videoUrls = req.files.videos_file.map(file => file.path);
       videos = [...videos, ...videoUrls];
+      console.log('Videos updated on Cloudinary:', videoUrls);
     }
     
     // Parse and add video URLs from request body
