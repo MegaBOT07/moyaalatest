@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
             <p>
               An anonymized string created from your email address (also called a hash) may be provided 
               to the Gravatar service to see if you are using it. The Gravatar service privacy policy is 
-              available at <a href="https://automattic.com/privacy/" className="text-gold-primary hover:text-rose-gold transition-colors">https://automattic.com/privacy/</a>. 
+              available at <a href="https://automattic.com/privacy/" className="text-gold-primary hover:text-gold-soft transition-colors">https://automattic.com/privacy/</a>. 
               After approval of your comment, your profile picture is visible to the public in the context 
               of your comment.
             </p>

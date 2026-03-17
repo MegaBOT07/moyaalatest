@@ -162,13 +162,13 @@ const EditProduct = () => {
           </div>
         )}
         {success && (
-          <div className="mb-6 p-4 bg-emerald-luxury/20 border border-emerald-luxury/50 rounded-lg text-emerald-luxury">
+          <div className="mb-6 p-4 bg-teal-luxury/20 border border-teal-luxury/50 rounded-lg text-teal-luxury">
             {success}
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="glass-card-sapphire border border-sapphire-luxury/40 p-8 rounded-lg shadow-glow-sapphire space-y-6">
+        <form onSubmit={handleSubmit} className="glass-card-sapphire border border-teal-luxury/40 p-8 rounded-lg shadow-glow-primary-wine space-y-6">
           
           {/* Basic Info */}
           <div>
@@ -180,7 +180,7 @@ const EditProduct = () => {
                   type="text"
                   value={form.name || ''}
                   onChange={e => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                   placeholder="Product name"
                 />
               </div>
@@ -189,7 +189,7 @@ const EditProduct = () => {
                 <select
                   value={form.category || ''}
                   onChange={e => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                 >
                   <option value="">Select category</option>
                   <option value="earrings">Earrings</option>
@@ -210,7 +210,7 @@ const EditProduct = () => {
                   type="number"
                   value={form.price || 0}
                   onChange={e => setForm({ ...form, price: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                   placeholder="0"
                 />
               </div>
@@ -220,7 +220,7 @@ const EditProduct = () => {
                   type="number"
                   value={form.originalPrice || ''}
                   onChange={e => setForm({ ...form, originalPrice: e.target.value })}
-                  className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                  className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
                   placeholder="0"
                 />
               </div>
@@ -234,7 +234,7 @@ const EditProduct = () => {
               value={form.description || ''}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows={5}
-              className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+              className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
               placeholder="Product description"
             />
           </div>
@@ -247,7 +247,7 @@ const EditProduct = () => {
                 <p className="text-sm text-platinum/70 mb-2">Current Images:</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {form.images.map((img: string, idx: number) => (
-                    <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-24 h-24 object-cover rounded border border-sapphire-luxury/40" />
+                    <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-24 h-24 object-cover rounded border border-teal-luxury/40" />
                   ))}
                 </div>
               </div>
@@ -258,14 +258,14 @@ const EditProduct = () => {
               multiple
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+              className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
             />
             {previewImages.length > 0 && (
               <div className="mt-3">
                 <p className="text-sm text-platinum/70 mb-2">New Images ({previewImages.length}):</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {previewImages.map((preview, idx) => (
-                    <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-24 h-24 object-cover rounded border border-emerald-luxury/40" />
+                    <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-24 h-24 object-cover rounded border border-teal-luxury/40" />
                   ))}
                 </div>
               </div>
@@ -292,7 +292,7 @@ const EditProduct = () => {
                 multiple
                 accept="video/*"
                 onChange={handleVideoChange}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
               />
               {videoFiles.length > 0 && (
                 <div className="mt-2 space-y-1">
@@ -313,7 +313,7 @@ const EditProduct = () => {
                   newUrls[0] = e.target.value;
                   setVideoUrls(newUrls);
                 }}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
               />
               <input
                 type="text"
@@ -324,7 +324,7 @@ const EditProduct = () => {
                   newUrls[1] = e.target.value;
                   setVideoUrls(newUrls);
                 }}
-                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
               />
             </div>
           </div>

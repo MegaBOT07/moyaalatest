@@ -52,7 +52,8 @@ const ShopByCategory = () => {
               className="group relative overflow-hidden rounded-2xl cursor-pointer"
             >
               {/* Card container */}
-              <div className="aspect-square md:aspect-[4/5] relative glass-card-ruby border border-ruby-luxury/40 rounded-2xl overflow-hidden shadow-glow-ruby hover:shadow-glow transition-all duration-300">
+              <div className="aspect-square md:aspect-[4/5] relative glass-card-ruby border border-primary-wine/40 rounded-2xl overflow-hidden shadow-glow-ruby hover:shadow-glow transition-all duration-300">
+
                 {/* Background image */}
                 <img
                   src={category.image}
@@ -77,7 +78,8 @@ const ShopByCategory = () => {
                 </div>
 
                 {/* Soft glow effect on hover */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 shadow-glow-sapphire rounded-2xl pointer-events-none" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 shadow-glow-emerald rounded-2xl pointer-events-none" />
+
               </div>
             </Link>
           ))}

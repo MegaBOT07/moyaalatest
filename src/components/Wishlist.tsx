@@ -22,7 +22,8 @@ const Wishlist: React.FC<WishlistProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-luxury-dark/70 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="glass-card-ruby border border-ruby-luxury/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-ruby">
+      <div className="glass-card-ruby border border-primary-wine/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-ruby">
+
         <div className="flex items-center justify-between p-6 border-b border-ruby-luxury/30">
           <h2 className="text-2xl font-bold text-gold-primary luxury-serif">Wishlist</h2>
           <button
@@ -48,7 +49,8 @@ const Wishlist: React.FC<WishlistProps> = ({ isOpen, onClose }) => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {state.wishlist.map((item) => (
-                <div key={item.id} className="glass-card-sapphire border border-sapphire-luxury/30 rounded-lg p-4 shadow-glow-sapphire">
+                <div key={item.id} className="glass-card-sapphire border border-teal-luxury/30 rounded-lg p-4 shadow-glow-emerald">
+
                   <div className="relative mb-4">
                     <img
                       src={item.image}

@@ -46,14 +46,16 @@ const FAQ = () => {
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className="glass-card-emerald border border-gold-primary/20 p-8 rounded-2xl hover:border-gold-primary/40 transition-all duration-300"
+              className="glass-card-emerald border border-teal-luxury/20 p-8 rounded-2xl hover:border-gold-primary/40 transition-all duration-300"
+
             >
               <h3 className="luxury-serif text-xl text-gold-primary mb-4 flex items-start gap-4">
                 <span className="bg-gold-primary/10 text-gold-primary w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm">Q</span>
                 {faq.question}
               </h3>
               <div className="text-platinum/80 leading-relaxed flex items-start gap-4">
-                <span className="bg-emerald-luxury/10 text-emerald-luxury w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm">A</span>
+                <span className="bg-teal-luxury/10 text-teal-luxury w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm">A</span>
+
                 <p>{faq.answer}</p>
               </div>
             </div>
@@ -61,14 +63,14 @@ const FAQ = () => {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-16 bg-gradient-to-r from-gold-primary/10 to-rose-gold/10 p-12 rounded-3xl border border-gold-primary/20 text-center">
+        <div className="mt-16 bg-gradient-to-r from-gold-primary/10 to-gold-soft/10 p-12 rounded-3xl border border-gold-primary/20 text-center">
           <h2 className="luxury-serif text-3xl text-platinum mb-4">Still have questions?</h2>
           <p className="text-platinum/70 mb-8 max-w-xl mx-auto">
             Our luxury consultants are available to assist you with any inquiries you may have.
           </p>
           <a 
             href="/contact" 
-            className="inline-block bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark px-10 py-4 rounded-xl font-bold tracking-widest text-sm hover:shadow-glow transition-all duration-300"
+            className="inline-block bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-10 py-4 rounded-xl font-bold tracking-widest text-sm hover:shadow-glow transition-all duration-300"
           >
             CONTACT CUSTOMER CARE
           </a>

@@ -93,7 +93,8 @@ const ShowcaseVideos: React.FC = () => {
 
         {showInput && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-            <div className="glass-card-sapphire border border-sapphire-luxury/30 p-4 rounded-lg shadow-glow-sapphire">
+            <div className="glass-card-sapphire border border-teal-luxury/30 p-4 rounded-lg shadow-glow-emerald">
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="p-2 bg-luxury-secondary border border-gold-primary/30 text-platinum rounded placeholder-platinum/40" />
                 <input value={url} onChange={e => setUrl(e.target.value)} placeholder="Video URL (mp4 or embed)" className="p-2 bg-luxury-secondary border border-gold-primary/30 text-platinum rounded placeholder-platinum/40" />
@@ -119,7 +120,8 @@ const ShowcaseVideos: React.FC = () => {
             <Link
               to="/products"
               key={(item as any)._id || item.id}
-              className="min-w-[260px] sm:min-w-[320px] md:min-w-[360px] lg:min-w-[420px] snap-start glass-card-ruby border border-ruby-luxury/30 rounded-2xl overflow-hidden relative shadow-glow-ruby hover:shadow-glow transition-all duration-300"
+              className="min-w-[260px] sm:min-w-[320px] md:min-w-[360px] lg:min-w-[420px] snap-start glass-card-ruby border border-primary-wine/30 rounded-2xl overflow-hidden relative shadow-glow-ruby hover:shadow-glow transition-all duration-300"
+
             >
               {item.type === 'video' ? (
                 <video

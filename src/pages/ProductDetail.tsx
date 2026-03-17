@@ -328,7 +328,8 @@ const ProductDetail = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Free Shipping */}
                 <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-emerald-luxury to-sapphire-luxury rounded-full">
+                  <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full">
+
                     <Truck className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -338,7 +339,8 @@ const ProductDetail = () => {
                 </div>
                 {/* Secure Payment */}
                 <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-sapphire-luxury to-gold-primary rounded-full">
+                  <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full">
+
                     <Shield className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -348,7 +350,8 @@ const ProductDetail = () => {
                 </div>
                 {/* Easy Returns */}
                 <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-ruby-luxury to-rose-gold rounded-full">
+                  <div className="p-2 bg-gradient-to-r from-primary-wine to-gold-soft rounded-full">
+
                     <RotateCcw className="h-5 w-5 text-white" />
                   </div>
                   <div>

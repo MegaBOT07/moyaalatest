@@ -25,7 +25,8 @@ const TrackOrder = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-4">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-4">
+
             TRACK YOUR ORDER
           </h1>
           <p className="text-platinum/70">
@@ -34,7 +35,8 @@ const TrackOrder = () => {
         </div>
 
         {/* Track Order Form */}
-        <div className="glass-card-sapphire border border-sapphire-luxury/40 shadow-glow-sapphire p-8 mb-8">
+        <div className="glass-card-sapphire border border-teal-luxury/40 shadow-glow-emerald p-8 mb-8">
+
           <form onSubmit={handleTrackOrder} className="space-y-6">
             <div>
               <label htmlFor="orderNumber" className="block text-sm font-medium text-platinum mb-2">
@@ -46,7 +48,8 @@ const TrackOrder = () => {
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
                 placeholder="Enter your order number"
-                className="w-full px-4 py-3 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none transition-all"
+                className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all"
+
                 required
               />
             </div>
@@ -61,7 +64,8 @@ const TrackOrder = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
-                className="w-full px-4 py-3 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none transition-all"
+                className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all"
+
                 required
               />
             </div>
@@ -77,16 +81,20 @@ const TrackOrder = () => {
         </div>
 
         {/* Sample Order Status */}
-        <div className="glass-card-emerald border border-emerald-luxury/40 shadow-glow-emerald p-8">
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-luxury to-sapphire-luxury mb-6">
+        <div className="glass-card-emerald border border-teal-luxury/40 shadow-glow-emerald p-8">
+
+          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-luxury to-gold-primary mb-6">
+
             Order Status
           </h2>
           
           <div className="space-y-6">
             {/* Order Confirmed */}
-            <div className="flex items-center space-x-4 pb-6 border-b border-emerald-luxury/20">
+            <div className="flex items-center space-x-4 pb-6 border-b border-teal-luxury/20">
+
               <div className="flex-shrink-0">
-                <div className="p-2 bg-gradient-to-r from-emerald-luxury to-sapphire-luxury rounded-full shadow-glow-emerald">
+                <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full shadow-glow-emerald">
+
                   <CheckCircle className="h-8 w-8 text-gold-primary" />
                 </div>
               </div>
@@ -98,9 +106,11 @@ const TrackOrder = () => {
             </div>
 
             {/* Processing */}
-            <div className="flex items-center space-x-4 pb-6 border-b border-emerald-luxury/20">
+            <div className="flex items-center space-x-4 pb-6 border-b border-teal-luxury/20">
+
               <div className="flex-shrink-0">
-                <div className="p-2 bg-gradient-to-r from-ruby-luxury to-rose-gold rounded-full shadow-glow-ruby">
+                <div className="p-2 bg-gradient-to-r from-primary-wine to-gold-soft rounded-full shadow-glow-ruby">
+
                   <Package className="h-8 w-8 text-gold-primary" />
                 </div>
               </div>
@@ -112,9 +122,11 @@ const TrackOrder = () => {
             </div>
 
             {/* Shipped */}
-            <div className="flex items-center space-x-4 pb-6 border-b border-emerald-luxury/20">
+            <div className="flex items-center space-x-4 pb-6 border-b border-teal-luxury/20">
+
               <div className="flex-shrink-0">
-                <div className="p-2 bg-gradient-to-r from-sapphire-luxury to-gold-primary rounded-full shadow-glow-sapphire">
+                <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full shadow-glow-emerald">
+
                   <Truck className="h-8 w-8 text-platinum" />
                 </div>
               </div>

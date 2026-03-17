@@ -85,7 +85,8 @@ const Header = () => {
 
                 {/* Dropdown Menu */}
                 <div className="absolute top-full left-0 pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                  <div className="glass-card-emerald shadow-glow-emerald rounded-lg p-3 border border-emerald-luxury/40">
+                  <div className="glass-card-emerald shadow-glow-emerald rounded-lg p-3 border border-teal-luxury/40">
+
                   <Link
                     to="/products"
                     className="block px-4 py-3 text-xs text-platinum hover:text-gold-primary hover:bg-emerald-luxury/20 rounded transition-all duration-300"

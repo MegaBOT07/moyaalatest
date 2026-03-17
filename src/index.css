@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #0b1a2b;
-  --accent-wine: #741522;
-  --accent-rose: #843a46;
-  --accent-dark: #261216;
-  --accent-teal: #143c45;
-  --gold: #a88a1f;
-  --text-primary: #ffffff;
-  --text-secondary: #cbd5e1;
+  --bg-primary: #2D1320;
+  --accent-wine: #8B4557;
+  --accent-rose: #9B6B7A;
+  --accent-dark: #3D1C2A;
+  --accent-teal: #1A6B6A;
+  --gold: #D4AF37;
+  --text-primary: #FDF8F0;
+  --text-secondary: #E8DDD4;
 }
+
 
 @keyframes marquee {
   0% {
@@ -32,6 +33,7 @@
   .luxury-bg {
     @apply bg-gradient-to-br from-luxury-dark via-luxury-secondary to-luxury-tertiary;
   }
+
 
   /* Gold swirl ornament with enhanced glow */
   .ornament-swirl {
@@ -68,20 +70,18 @@
     box-shadow: 0 0 40px rgba(212, 175, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* Ruby Glass Card */
+  /* Ruby Glass Card (Wine) */
   .glass-card-ruby {
     @apply bg-glass-dark backdrop-blur-xl border border-primary-wine/30 rounded-2xl shadow-glow-ruby;
   }
 
-  /* Emerald Glass Card */
-  .glass-card-emerald {
+
+  /* Forest Teal Glass Card */
+  .glass-card-emerald, 
+  .glass-card-sapphire {
     @apply bg-glass-dark backdrop-blur-xl border border-teal-luxury/30 rounded-2xl shadow-glow-emerald;
   }
 
-  /* Sapphire Glass Card */
-  .glass-card-sapphire {
-    @apply bg-glass-dark backdrop-blur-xl border border-teal-luxury/30 rounded-2xl shadow-glow-sapphire;
-  }
 
   /* Premium Gold Text Gradient */
   .text-gold-gradient {
@@ -89,23 +89,24 @@
     background: linear-gradient(135deg, #d4af37 0%, #e8c547 50%, #d4af37 100%);
   }
 
-  /* Wine Red Gradient */
+  /* Ruby Gradient */
   .text-ruby-gradient {
     @apply text-transparent bg-clip-text;
-    background: linear-gradient(135deg, #741522 0%, #843a46 100%);
+    background: linear-gradient(135deg, #8B4557 0%, #9B6B7A 100%);
   }
 
   /* Teal Gradient */
   .text-emerald-gradient {
     @apply text-transparent bg-clip-text;
-    background: linear-gradient(135deg, #143c45 0%, #2a6b78 100%);
+    background: linear-gradient(135deg, #1A6B6A 0%, #2A8B8A 100%);
   }
 
   /* Teal Gradient Alt */
   .text-sapphire-gradient {
     @apply text-transparent bg-clip-text;
-    background: linear-gradient(135deg, #143c45 0%, #2a6b78 100%);
+    background: linear-gradient(135deg, #1A6B6A 0%, #2A8B8A 100%);
   }
+
 
   /* Concentric rings effect with jewel tones */
   .spotlight-rings {
@@ -171,17 +172,18 @@
 
   /* Premium Animated Gradients */
   .animated-gradient {
-    background: linear-gradient(-45deg, #0b1a2b, #261216, #143c45, #0b1a2b);
+    background: linear-gradient(-45deg, #2D1320, #3D1C2A, #1A6B6A, #2D1320);
     background-size: 400% 400%;
     animation: gradientPremium 20s ease infinite;
   }
 
   /* Gradient with Luxury Accents */
   .gradient-jewels {
-    background: linear-gradient(135deg, rgba(20, 60, 69, 0.08), rgba(212, 175, 55, 0.08), rgba(116, 21, 34, 0.08), rgba(132, 58, 70, 0.08));
+    background: linear-gradient(135deg, rgba(26, 107, 106, 0.15), rgba(212, 175, 55, 0.12), rgba(139, 69, 87, 0.15), rgba(155, 107, 122, 0.12));
     background-size: 400% 400%;
     animation: gradientPremium 25s ease infinite;
   }
+
 
   /* Premium Button Styles */
   .btn-premium-gold {
@@ -200,16 +202,17 @@
 
   .btn-premium-ruby {
     @apply relative px-8 py-3 text-white font-semibold rounded-lg overflow-hidden border;
-    background: linear-gradient(135deg, #741522, #843a46);
-    box-shadow: 0 0 30px rgba(116, 21, 34, 0.3);
+    background: linear-gradient(135deg, #8B4557, #9B6B7A);
+    box-shadow: 0 0 30px rgba(139, 69, 87, 0.35);
     transition: all 0.3s ease;
-    border-color: rgba(116, 21, 34, 0.4);
+    border-color: rgba(139, 69, 87, 0.5);
   }
 
   .btn-premium-ruby:hover {
     @apply scale-105;
-    box-shadow: 0 0 40px rgba(116, 21, 34, 0.5), inset 0 0 10px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 40px rgba(139, 69, 87, 0.5), inset 0 0 10px rgba(212, 175, 55, 0.2);
   }
+
 
   /* Shimmer effect for premium elements */
   .shimmer {
@@ -226,13 +229,15 @@
 
   .border-ruby-glow {
     @apply border-primary-wine/40 border-2;
-    box-shadow: inset 0 0 20px rgba(116, 21, 34, 0.15);
+    box-shadow: inset 0 0 20px rgba(139, 69, 87, 0.2);
   }
 
-  .border-emerald-glow {
+  .border-emerald-glow,
+  .border-sapphire-glow {
     @apply border-teal-luxury/40 border-2;
-    box-shadow: inset 0 0 20px rgba(20, 60, 69, 0.15);
+    box-shadow: inset 0 0 20px rgba(26, 107, 106, 0.2);
   }
+
 }
 
 @keyframes sparklePulse {

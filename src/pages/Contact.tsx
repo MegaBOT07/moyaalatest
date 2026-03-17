@@ -37,9 +37,11 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-luxury-dark">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-gold-primary/20 via-ruby-luxury/10 to-gold-primary/20 py-16 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
+      <div className="bg-gradient-to-r from-primary-wine/20 via-teal-luxury/10 to-primary-wine/20 py-16 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
+
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-6 luxury-serif">CONTACT US</h1>
+          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-6 luxury-serif">CONTACT US</h1>
+
           <p className="text-xl text-platinum/80 leading-relaxed">
             We'd love to hear from you. Get in touch with our team for any questions,
             custom orders, or jewelry consultations.
@@ -62,7 +64,8 @@ const Contact = () => {
 
             <div className="space-y-6">
               <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-gold-primary to-rose-gold p-3 rounded-lg shadow-glow-gold">
+                <div className="bg-gradient-to-r from-gold-primary to-gold-soft p-3 rounded-lg shadow-glow-gold">
+
                   <Mail className="h-6 w-6 text-luxury-dark" />
                 </div>
                 <div>
@@ -72,7 +75,8 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-emerald-luxury to-sapphire-luxury p-3 rounded-lg shadow-glow-emerald">
+                <div className="bg-gradient-to-r from-teal-luxury to-gold-primary p-3 rounded-lg shadow-glow-emerald">
+
                   <Phone className="h-6 w-6 text-platinum" />
                 </div>
                 <div>
@@ -82,11 +86,13 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-ruby-luxury to-amethyst-luxury p-3 rounded-lg shadow-glow-ruby">
+                <div className="bg-gradient-to-r from-primary-wine to-gold-soft p-3 rounded-lg shadow-glow-ruby">
+
                   <MapPin className="h-6 w-6 text-platinum" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-ruby-luxury mb-1">Visit Our Store</h3>
+                  <h3 className="text-lg font-semibold text-primary-wine mb-1">Visit Our Store</h3>
+
                   <p className="text-platinum/70">
                     455, four gate out side mandhi khatikan<br />
                     Pahadiya chowk, near chota shiv tample<br />
@@ -96,11 +102,13 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-sapphire-luxury to-gold-primary p-3 rounded-lg shadow-glow-sapphire">
+                <div className="bg-gradient-to-r from-teal-luxury to-gold-primary p-3 rounded-lg shadow-glow-emerald">
+
                   <Clock className="h-6 w-6 text-platinum" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-sapphire-luxury mb-1">Business Hours</h3>
+                  <h3 className="text-lg font-semibold text-teal-luxury mb-1">Business Hours</h3>
+
                   <p className="text-platinum/70">
                     Monday - Saturday: 10:00 AM - 8:00 PM<br />
                     Sunday: 11:00 AM - 6:00 PM
@@ -110,27 +118,28 @@ const Contact = () => {
             </div>
 
             {/* Services */}
-            <div className="glass-card-emerald border border-emerald-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+            <div className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+
               <h3 className="text-xl font-bold text-gold-primary mb-4 luxury-serif">Our Services</h3>
               <ul className="space-y-2 text-platinum/80">
                 <li className="flex items-center space-x-2">
-                  <span className="text-gold-primary">✨</span>
+                  <span className="text-gold-soft">✨</span>
                   <span>Custom Jewelry Design</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-emerald-luxury">✨</span>
+                  <span className="text-teal-luxury">✨</span>
                   <span>Jewelry Repair & Maintenance</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-ruby-luxury">✨</span>
-                  <span>Personal Shopping Consultation</span>
+                  <span className="text-primary-wine">✨</span>
+                  <span>Professional Resizing</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-sapphire-luxury">✨</span>
+                  <span className="text-teal-luxury">✨</span>
                   <span>Gift Wrapping Services</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <span className="text-gold-primary">✨</span>
+                  <span className="text-gold-soft">✨</span>
                   <span>Jewelry Authentication</span>
                 </li>
               </ul>
@@ -138,7 +147,8 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="glass-card-sapphire border border-sapphire-luxury/40 p-8 rounded-lg shadow-glow-sapphire">
+          <div className="glass-card-sapphire border border-teal-luxury/40 p-8 rounded-lg shadow-glow-emerald">
+
             <h2 className="text-2xl font-bold text-gold-primary mb-6 luxury-serif">Send Us a Message</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -153,7 +163,8 @@ const Contact = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none transition-all duration-300"
+                    className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all duration-300"
+
                     placeholder="Your full name"
                     required
                   />
@@ -169,7 +180,8 @@ const Contact = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none transition-all duration-300"
+                    className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all duration-300"
+
                     placeholder="your.email@example.com"
                     required
                   />
@@ -186,7 +198,8 @@ const Contact = () => {
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none transition-all duration-300"
+                  className="w-full px-4 py-3 bg-luxury-secondary border border-teal-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 focus:border-transparent outline-none transition-all duration-300"
+
                   placeholder="What is this regarding?"
                   required
                 />
@@ -217,7 +230,8 @@ const Contact = () => {
               </button>
             </form>
 
-            <div className="mt-6 p-4 glass-card-ruby border border-ruby-luxury/30 rounded-lg shadow-glow-ruby">
+            <div className="mt-6 p-4 glass-card-ruby border border-primary-wine/30 rounded-lg shadow-glow-ruby">
+
               <p className="text-sm text-platinum">
                 <strong>Response Time:</strong> We typically respond to all inquiries within 24 hours during business days.
               </p>

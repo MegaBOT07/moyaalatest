@@ -47,14 +47,14 @@ const TermsConditions = () => {
           <section>
             <h2 className="luxury-serif text-3xl text-gold-primary mb-4">5. Shipping and Delivery</h2>
             <p>
-              Shipping and delivery are subject to our <a href="/shipping-policy" className="text-gold-primary hover:text-rose-gold underline font-medium">Shipping Policy</a>. We are not responsible for delays caused by third-party carriers or customs.
+              Shipping and delivery are subject to our <a href="/shipping-policy" className="text-gold-primary hover:text-gold-soft underline font-medium">Shipping Policy</a>. We are not responsible for delays caused by third-party carriers or customs.
             </p>
           </section>
 
           <section>
             <h2 className="luxury-serif text-3xl text-gold-primary mb-4">6. Returns and Refunds</h2>
             <p>
-              Returns and refunds are subject to our <a href="/refund-policy" className="text-gold-primary hover:text-rose-gold underline font-medium">Refund Policy</a>.
+              Returns and refunds are subject to our <a href="/refund-policy" className="text-gold-primary hover:text-gold-soft underline font-medium">Refund Policy</a>.
             </p>
           </section>
 
