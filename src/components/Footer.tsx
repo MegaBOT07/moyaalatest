@@ -41,26 +41,29 @@ const Footer = () => {
           <div className="col-span-1">
             <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">COLLECTIONS</h4>
             <ul className="space-y-4">
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Earrings</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Necklaces</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Bracelets</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">New Arrivals</a></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Limited Edition</a></li>
+              <li><Link to="/earrings" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Earrings</Link></li>
+              <li><Link to="/necklaces" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Necklaces</Link></li>
+              <li><Link to="/bracelets" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Bracelets</Link></li>
+              <li><Link to="/products" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">New Arrivals</Link></li>
+              <li><Link to="/products" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Limited Edition</Link></li>
             </ul>
           </div>
+
 
           {/* Information */}
           <div className="col-span-1">
             <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">INFORMATION</h4>
             <ul className="space-y-4">
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">About Us</a></li>
+              <li><Link to="/about-us" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">About Us</Link></li>
               <li><Link to="/privacy-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Privacy Policy</Link></li>
               <li><Link to="/shipping-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Shipping Policy</Link></li>
               <li><Link to="/refund-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Refund Policy</Link></li>
               <li><Link to="/jewellery-care-guide" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Jewellery Care</Link></li>
-              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Terms & Conditions</a></li>
+              <li><Link to="/terms-conditions" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Terms & Conditions</Link></li>
+              <li><Link to="/faq" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">FAQ</Link></li>
             </ul>
           </div>
+
 
           {/* Newsletter */}
           <div className="col-span-1">
@@ -163,10 +166,11 @@ const Footer = () => {
             © 2024 Moraa Jewelry. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</a>
-            <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Terms</a>
-            <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Accessibility</a>
+            <Link to="/privacy-policy" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</Link>
+            <Link to="/terms-conditions" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Terms</Link>
+            <Link to="/accessibility" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Accessibility</Link>
           </div>
+
         </div>
       </div>
     </footer>

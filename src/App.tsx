@@ -20,6 +20,11 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import ShippingPolicy from './pages/ShippingPolicy';
 import JewelleryCareGuide from './pages/JewelleryCareGuide';
+import AboutUs from './pages/AboutUs';
+import TermsConditions from './pages/TermsConditions';
+import FAQ from './pages/FAQ';
+import Accessibility from './pages/Accessibility';
+
 
 function App() {
   return (
@@ -44,7 +49,12 @@ function App() {
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/jewellery-care-guide" element={<JewelleryCareGuide />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/accessibility" element={<Accessibility />} />
           </Routes>
+
           <Footer />
           <SignInModal />
         </div>
