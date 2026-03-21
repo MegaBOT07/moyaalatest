@@ -146,8 +146,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-luxury-dark/70 backdrop-blur-sm flex items-start justify-center z-50 pt-20">
-      <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-emerald">
-
+      <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-sapphire">
         <div className="flex items-center justify-between p-6 border-b border-gold-primary/30">
           <h2 className="text-2xl font-bold text-gold-primary luxury-serif">Search Products</h2>
           <button
@@ -194,8 +193,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                   const isInWishlist = state.wishlist.find(item => item.id === product.id);
                   
                   return (
-                    <div key={product.id} className="glass-card-sapphire border border-teal-luxury/30 rounded-lg p-4 hover:shadow-glow-emerald transition-all duration-300">
-
+                    <div key={product.id} className="glass-card-sapphire border border-sapphire-luxury/30 rounded-lg p-4 hover:shadow-glow-sapphire transition-all duration-300">
                       <div className="relative mb-4">
                         <img
                           src={product.image}
@@ -208,8 +206,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                           </div>
                         )}
                         {product.soldOut && (
-                          <div className="absolute top-2 right-2 bg-primary-wine text-platinum px-2 py-1 text-xs font-medium rounded shadow-glow-ruby">
-
+                          <div className="absolute top-2 right-2 bg-ruby-luxury text-platinum px-2 py-1 text-xs font-medium rounded shadow-glow-ruby">
                             Sold Out
                           </div>
                         )}

@@ -2,26 +2,9 @@ import React, { useState } from 'react';
 import { Heart, ChevronDown, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { useSEO } from '../utils/useSEO';
-import { generateBreadcrumbSchema } from '../utils/schemaGenerator';
 
 const AllProducts = () => {
   const { state, dispatch } = useAppContext();
-  
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: 'https://moraajewles.com' },
-    { name: 'Products', url: 'https://moraajewles.com/products' }
-  ]);
-
-  useSEO({
-    title: 'All Products - MORAA REFLECTION Premium Jewelry Collection',
-    description: 'Browse our complete collection of premium luxury jewelry. Find the perfect earrings, necklaces, bracelets and more from MORAA REFLECTION.',
-    keywords: 'all products, jewelry collection, earrings, necklaces, bracelets, luxury jewelry, premium accessories',
-    url: 'https://moraajewles.com/products',
-    type: 'product.group',
-    structuredData: breadcrumbSchema
-  });
-  
   const [selectedFilters, setSelectedFilters] = useState({
     collection: '',
     availability: '',
@@ -29,6 +12,7 @@ const AllProducts = () => {
   });
 
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
+  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
 
   const products = state.products;
@@ -95,6 +79,30 @@ const AllProducts = () => {
               )}
             </div>
 
+            {/* Availability Filter */}
+            <div className="border-b border-gold-primary/30 pb-6">
+              <button
+                onClick={() => setIsAvailabilityOpen(!isAvailabilityOpen)}
+                className="flex items-center justify-between w-full text-left"
+              >
+                <h4 className="text-sm font-medium text-gray-900 luxury-serif">AVAILABILITY</h4>
+                <ChevronDown className={`h-4 w-4 text-gold-primary transform transition-transform ${isAvailabilityOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isAvailabilityOpen && (
+                <div className="mt-4 space-y-3">
+                  <label className="flex items-center">
+                    <input type="checkbox" className="mr-3 accent-gold-primary" />
+                    <span className="text-sm text-gray-700">In stock (18)</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" className="mr-3 accent-gold-primary" />
+                    <span className="text-sm text-gray-700">Out of stock (1)</span>
+                  </label>
+                </div>
+              )}
+            </div>
+
             {/* Price Filter */}
             <div className="pb-6">
               <button
@@ -152,6 +160,11 @@ const AllProducts = () => {
                           Sale
                         </div>
                       )}
+                      {product.soldOut && (
+                        <div className="absolute top-4 right-12 bg-primary-wine text-white px-3 py-1 text-sm font-medium rounded z-10 shadow-md">
+                          Sold Out
+                        </div>
+                      )}
                       <button 
                         onClick={() => toggleWishlist(product)}
                         className="absolute top-4 right-4 p-2 bg-white/80 rounded-full shadow-md hover:shadow-lg transition-all z-10 border border-gold-primary/30"
@@ -165,14 +178,20 @@ const AllProducts = () => {
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <button
-                        onClick={() => addToCart(product)}
-                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow opacity-0 group-hover:opacity-100 flex items-center space-x-2 transition-all duration-300"
-                      >
-                        <ShoppingBag className="h-4 w-4" />
-                        <span>Add to Cart</span>
-                      </button>
-
+                      {!product.soldOut && (
+                        <button
+                          onClick={() => addToCart(product)}
+                          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 btn-premium-gold text-luxury-dark px-4 py-2 rounded-lg font-medium hover:shadow-glow opacity-0 group-hover:opacity-100 flex items-center space-x-2 transition-all duration-300"
+                        >
+                          <ShoppingBag className="h-4 w-4" />
+                          <span>Add to Cart</span>
+                        </button>
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-sm font-medium text-gray-900 mb-2 luxury-serif">
+                        {product.name}
+                      </h3>
                       <div className="flex items-center justify-center space-x-2">
                         <span className="text-lg font-bold text-gold-primary">
                           Rs. {product.price.toLocaleString()}.00
@@ -183,11 +202,6 @@ const AllProducts = () => {
                           </span>
                         )}
                       </div>
-
-                      {/* Rating if available */}
-                      {product.averageRating !== undefined && product.averageRating > 0 && (
-                        <p className="text-xs text-gold-primary mt-1">⭐ {product.averageRating} ({product.reviewCount || 0} reviews)</p>
-                      )}
                     </div>
                   </Link>
                 );

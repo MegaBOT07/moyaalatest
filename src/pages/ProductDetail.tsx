@@ -1,97 +1,15 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ShoppingBag, Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import { useSEO } from '../utils/useSEO';
-import { generateProductSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
-import { getImageUrl, handleImageError, handleVideoError } from '../utils/mediaHelper';
-import { API_ENDPOINTS } from '../utils/api';
-import ProductReviews from '../components/ProductReviews';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { state, dispatch } = useAppContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [apiProduct, setApiProduct] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
-  // First try to find in state
-  let product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
-
-  // If not in state and we have an API product, use that
-  if (!product && apiProduct) {
-    product = apiProduct;
-  }
-
-  // Fetch product from API if not found in state
-  useEffect(() => {
-    if (!product && id) {
-      const fetchProduct = async () => {
-        try {
-          const response = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
-          if (response.ok) {
-            const data = await response.json();
-            setApiProduct(data);
-          }
-        } catch (err) {
-          console.error('Failed to fetch product:', err);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProduct();
-    } else {
-      setLoading(false);
-    }
-  }, [id, product]);
-
-  // Update SEO after product is loaded
-  if (product) {
-    const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image || 'https://moraajewles.com/logo.png';
-    const productSchema = generateProductSchema({
-      name: product.name,
-      description: product.description || `Premium ${product.category} from MORAA REFLECTION`,
-      image: product.images || [productImage],
-      price: product.price || product.originalPrice || 0,
-      priceCurrency: 'INR',
-      availability: product.soldOut ? 'OutOfStock' : 'InStock',
-      category: product.category,
-      url: `https://moraajewles.com/product/${id}`,
-      brand: 'MORAA REFLECTION'
-    });
-
-    const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: 'https://moraajewles.com' },
-      { name: 'Products', url: 'https://moraajewles.com/products' },
-      { name: product.category, url: `https://moraajewles.com/${product.category.toLowerCase()}` },
-      { name: product.name, url: `https://moraajewles.com/product/${id}` }
-    ]);
-
-    useSEO({
-      title: `${product.name} - Premium ${product.category} | MORAA REFLECTION`,
-      description: product.description || `Buy ${product.name} from MORAA REFLECTION. Premium ${product.category} with finest craftsmanship. Original price: ${product.originalPrice ? `₹${product.originalPrice}` : 'Contact for price'}`,
-      keywords: `${product.name}, ${product.category}, luxury jewelry, premium jewelry, buy ${product.category.toLowerCase()}`,
-      image: productImage,
-      url: `https://moraajewles.com/product/${id}`,
-      type: 'product',
-      structuredData: {
-        '@context': 'https://schema.org',
-        '@graph': [productSchema, breadcrumbSchema]
-      }
-    });
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gold-primary"></div>
-          <p className="mt-4 text-gray-600">Loading product...</p>
-        </div>
-      </div>
-    );
-  }
+  const product = state.products.find(p => (p as any)._id === id || String(p.id) === id);
 
   if (!product) {
     return (
@@ -108,6 +26,7 @@ const ProductDetail = () => {
 
   const isInWishlist = state.wishlist.find(item => item.id === product.id || (item as any)._id === (product as any)._id);
   const images = (product.images && product.images.length > 0) ? product.images : (product.image ? [product.image] : ['https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=600']);
+  const productId = (product as any)._id || product.id;
 
   const toggleWishlist = () => {
     if (isInWishlist) {
@@ -153,10 +72,9 @@ const ProductDetail = () => {
             {/* Main Image */}
             <div className="relative aspect-square bg-gray-100 border border-gold-primary/20 rounded-lg overflow-hidden shadow-md">
               <img
-                src={getImageUrl(images[currentImageIndex])}
+                src={images[currentImageIndex]}
                 alt={product.name}
                 className="w-full h-full object-cover"
-                onError={handleImageError}
               />
               {images.length > 1 && (
                 <>
@@ -200,10 +118,9 @@ const ProductDetail = () => {
                     }`}
                   >
                     <img
-                      src={getImageUrl(image)}
+                      src={image}
                       alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
-                      onError={handleImageError}
                     />
                   </button>
                 ))}
@@ -219,14 +136,11 @@ const ProductDetail = () => {
               <div className="flex items-center space-x-2 mb-4">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`h-4 w-4 ${i < Math.round(product.averageRating || 0) ? 'fill-gold-primary text-gold-primary' : 'text-gray-300'}`} />
+                    <Star key={i} className="h-4 w-4 fill-gold-primary text-gold-primary" />
                   ))}
                 </div>
-                <span className="text-sm text-gray-600">
-                  {product.averageRating ? `${product.averageRating}` : 'No ratings'} ({product.reviewCount || 0} review{product.reviewCount !== 1 ? 's' : ''})
-                </span>
+                <span className="text-sm text-gray-600">(24 reviews)</span>
               </div>
-              
               <div className="flex items-center space-x-4 mb-6">
                 <span className="text-3xl font-bold text-gold-primary">
                   Rs. {product.price.toLocaleString()}.00
@@ -307,10 +221,15 @@ const ProductDetail = () => {
               <div className="flex space-x-4">
                 <button
                   onClick={addToCart}
-                  className="flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all btn-premium-gold text-luxury-dark hover:shadow-glow-gold"
+                  disabled={product.soldOut}
+                  className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-all ${
+                    product.soldOut
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-300'
+                      : 'btn-premium-gold text-luxury-dark hover:shadow-glow-gold'
+                  }`}
                 >
                   <ShoppingBag className="h-5 w-5" />
-                  <span>Add to Cart</span>
+                  <span>{product.soldOut ? 'Sold Out' : 'Add to Cart'}</span>
                 </button>
                 <button
                   onClick={toggleWishlist}
@@ -328,8 +247,7 @@ const ProductDetail = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Free Shipping */}
                 <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full">
-
+                  <div className="p-2 bg-gradient-to-r from-emerald-luxury to-sapphire-luxury rounded-full">
                     <Truck className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -339,8 +257,7 @@ const ProductDetail = () => {
                 </div>
                 {/* Secure Payment */}
                 <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-teal-luxury to-gold-primary rounded-full">
-
+                  <div className="p-2 bg-gradient-to-r from-sapphire-luxury to-gold-primary rounded-full">
                     <Shield className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -350,8 +267,7 @@ const ProductDetail = () => {
                 </div>
                 {/* Easy Returns */}
                 <div className="flex items-center space-x-3 bg-gray-50 border border-gold-primary/20 p-3 rounded-lg">
-                  <div className="p-2 bg-gradient-to-r from-primary-wine to-gold-soft rounded-full">
-
+                  <div className="p-2 bg-gradient-to-r from-ruby-luxury to-rose-gold rounded-full">
                     <RotateCcw className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -376,46 +292,8 @@ const ProductDetail = () => {
                 </ul>
               </div>
             </div>
-
-            {/* Product Videos */}
-            {(product as any).videos && (product as any).videos.length > 0 && (
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Product Videos</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {(product as any).videos.map((video: string, idx: number) => {
-                    if (!video) return null;
-                    const isEmbedUrl = video.includes('youtube.com') || video.includes('youtu.be') || video.includes('vimeo.com') || video.includes('player.vimeo');
-                    return (
-                      <div key={idx} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border border-gold-primary/20 shadow-md">
-                        {isEmbedUrl ? (
-                          <iframe
-                            src={video}
-                            className="w-full h-full"
-                            allowFullScreen
-                            allow="autoplay; fullscreen; picture-in-picture"
-                            title={`Product Video ${idx + 1}`}
-                          />
-                        ) : (
-                          <video
-                            src={getImageUrl(video)}
-                            className="w-full h-full object-cover"
-                            controls
-                            controlsList="nodownload"
-                            onError={handleVideoError}
-                            poster="https://via.placeholder.com/400?text=Video"
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
           </div>
         </div>
-
-        {/* Customer Reviews Section */}
-        {id && <ProductReviews productId={id} />}
       </div>
     </div>
   );

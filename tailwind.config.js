@@ -4,52 +4,47 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Premium Luxury Backgrounds (from client images)
-        'luxury-dark': '#2D1320',        // Warm plum (Enduring Beauty bg)
-        'luxury-secondary': '#3D1C2A',   // Rich burgundy plum
-        'luxury-tertiary': '#1A6B6A',    // Visible rich teal (Moments Made Eternal bg)
+        // Premium Luxury Dark Backgrounds
+        'luxury-dark': '#261216',        // Dark chocolate / black wine
+        'luxury-secondary': '#0b1a2b',   // Deep navy blue
+        'luxury-tertiary': '#143c45',    // Premium teal highlight
         
-        // Brand Accents (matching client visuals)
-        'primary-wine': '#8B4557',       // Dusty rose-wine (Timeless Elegance bg)
-        'secondary-rose': '#9B6B7A',     // Lighter mauve rose
-        'ruby-luxury': '#6B2D3E',        // Medium wine
-        'teal-luxury': '#1A6B6A',        // Rich visible teal
-        'emerald-luxury': '#1A6B6A',     // Alias for teal
-        'sapphire-luxury': '#1A6B6A',    // Alias for teal
-        'amethyst-luxury': '#6B2D3E',    // Alias for wine
+        // Luxury Wine & Rose Accents
+        'primary-wine': '#741522',       // Deep wine red (Primary Accent)
+        'secondary-rose': '#843a46',     // Muted rose maroon
+        'ruby-luxury': '#741522',        // Deep wine red
+        'teal-luxury': '#143c45',        // Premium teal blue-green
         
-        // Premium Gold & Light
-        'gold-primary': '#D4AF37',       // Authentic luxury gold
-        'gold-soft': '#C5A059',          // Muted champagne gold
-        'gold-highlight': '#F1D279',     // Brighter gold reflection
-        'platinum': '#FDF8F0',           // Warm cream white
-        'rose-gold': '#C4887A',          // Warm rose gold
+        // Premium Gold & Platinum
+        'gold-primary': '#a88a1f',       // Luxury gold accent
+        'gold-soft': '#a88a1f',          // Luxury gold
+        'gold-highlight': '#e8c547',     // Brighter luxury gold
+        'platinum': '#ffffff',           // Pure white
+        'rose-gold': '#843a46',          // Muted rose maroon
         
         // Premium Text Colors
-        'text-primary': '#FDF8F0',       // Warm cream white
-        'text-secondary': '#E8DDD4',     // Soft warm grey
-        'text-muted': '#B8A99A',         // Warm taupe
-        'text-accent': '#D4AF37',        // Signature gold text
+        'text-primary': '#ffffff',       // Pure white
+        'text-secondary': '#cbd5e1',     // Light slate
+        'text-muted': '#94a3b8',         // Muted slate
+        'text-accent': '#a88a1f',        // Gold text
         
         // Glass & Overlay
-        'glass-light': 'rgba(255, 255, 255, 0.08)',
-        'glass-dark': 'rgba(45, 19, 32, 0.75)',
+        'glass-light': 'rgba(255, 255, 255, 0.05)',
+        'glass-dark': 'rgba(0, 0, 0, 0.4)',
       },
-
       fontFamily: {
         'serif': ['Georgia', 'Garamond', 'serif'],
         'sans': ['Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif'],
       },
       boxShadow: {
-        'glow': '0 0 30px rgba(212, 175, 55, 0.35)',
-        'glow-lg': '0 0 60px rgba(212, 175, 55, 0.25)',
-        'glow-ruby': '0 0 40px rgba(139, 69, 87, 0.4)',
-        'glow-emerald': '0 0 40px rgba(26, 107, 106, 0.4)',
-        'glow-sapphire': '0 0 40px rgba(26, 107, 106, 0.4)',
-        'inner-glow': 'inset 0 0 20px rgba(212, 175, 55, 0.2)',
-        'premium': '0 20px 50px rgba(45, 19, 32, 0.6), 0 0 40px rgba(212, 175, 55, 0.25)',
+        'glow': '0 0 30px rgba(168, 138, 31, 0.3)',
+        'glow-lg': '0 0 60px rgba(168, 138, 31, 0.2)',
+        'glow-ruby': '0 0 40px rgba(116, 21, 34, 0.25)',
+        'glow-emerald': '0 0 40px rgba(20, 60, 69, 0.25)',
+        'glow-sapphire': '0 0 40px rgba(20, 60, 69, 0.25)',
+        'inner-glow': 'inset 0 0 20px rgba(168, 138, 31, 0.1)',
+        'premium': '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 138, 31, 0.15)',
       },
-
       backdropFilter: {
         'glass': 'backdrop-filter blur(20px)',
       },

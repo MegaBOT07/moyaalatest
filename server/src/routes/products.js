@@ -2,25 +2,33 @@ import express from 'express';
 import Product from '../models/Product.js';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-const upload = multer({ 
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit for images
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const uploadDir = path.join(__dirname, '..', '..', 'uploads');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, `${Date.now()}-${Math.random().toString(36).substr(2,6)}${ext}`);
+  }
 });
+const upload = multer({ storage });
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    console.log('GET /api/products - Fetching products from MongoDB...');
     const items = await Product.find().sort({ createdAt: -1 });
-    console.log(`GET /api/products - Found ${items.length} products`);
-    res.json(items || []);
+    res.json(items);
   } catch (err) {
-    console.error('GET /api/products error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch products: ' + err.message });
+    console.error('GET /api/products error:', err);
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -35,183 +43,32 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos_file', maxCount: 2 }]), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
     const body = { ...req.body };
-    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
-    
-    console.log('POST /api/products - Body:', JSON.stringify(body, null, 2));
-    
-    // Validate required fields
-    if (!body.name || !body.price) {
-      return res.status(400).json({ error: 'Name and price are required' });
+    if (req.file) {
+      body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
-    
-    // Convert string numbers to actual numbers
-    if (typeof body.price === 'string') {
-      body.price = parseFloat(body.price);
-    }
-    if (body.originalPrice && typeof body.originalPrice === 'string') {
-      body.originalPrice = parseFloat(body.originalPrice);
-    }
-    
-    // Convert soldOut string to boolean
-    if (body.soldOut !== undefined) {
-      if (typeof body.soldOut === 'string') {
-        body.soldOut = body.soldOut === 'true';
-      }
-    }
-    
-    // Convert stock string to number
-    if (body.stock !== undefined) {
-      if (typeof body.stock === 'string') {
-        body.stock = parseInt(body.stock) || 0;
-      }
-    }
-    
-    // Handle image uploads - Convert to Base64
-    if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => {
-        const b64 = file.buffer.toString('base64');
-        return `data:${file.mimetype};base64,${b64}`;
-      });
-      body.images = imageUrls;
-      body.image = imageUrls[0];
-      console.log('Images converted to Base64 and stored in MongoDB');
-    }
-    
-    // Handle video uploads and URLs
-    let videos = [];
-    
-    // Add uploaded video files - Convert to Base64
-    if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => {
-        const b64 = file.buffer.toString('base64');
-        return `data:${file.mimetype};base64,${b64}`;
-      });
-      videos = [...videos, ...videoUrls];
-      console.log('Videos converted to Base64 and stored in MongoDB');
-    }
-    
-    // Parse and add video URLs from request body
-    if (req.body.videos) {
-      try {
-        let parsedVideos = [];
-        if (typeof req.body.videos === 'string') {
-          parsedVideos = JSON.parse(req.body.videos);
-        } else if (Array.isArray(req.body.videos)) {
-          parsedVideos = req.body.videos;
-        }
-        
-        // Filter out placeholder file references
-        const urlVideos = parsedVideos.filter((v) => v && !v.startsWith('__file_'));
-        videos = [...videos, ...urlVideos];
-        console.log('Video URLs parsed:', urlVideos);
-      } catch (e) {
-        console.warn('Error parsing videos:', e.message);
-      }
-    }
-    
-    // Set videos if any exist
-    if (videos.length > 0) {
-      body.videos = videos;
-    }
-    
     const p = new Product(body);
     await p.save();
-    console.log('Product saved:', p);
     res.status(201).json(p);
   } catch (err) {
-    console.error('POST /api/products error - Full error:', err);
-    console.error('Error message:', err.message);
-    console.error('Error stack:', err.stack);
-    res.status(500).json({ error: err.message, details: err.toString() });
+    console.error('POST /api/products error:', err);
+    res.status(500).json({ error: err.message });
   }
 });
 
-router.put('/:id', upload.fields([{ name: 'image', maxCount: 10 }, { name: 'videos_file', maxCount: 2 }]), async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
   try {
     const body = { ...req.body };
-    const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
-    
-    console.log('PUT /api/products/:id - ID:', req.params.id);
-    
-    // Remove fields that shouldn't be updated directly
-    delete body._id;
-    
-    // Convert string numbers to actual numbers
-    if (body.price && typeof body.price === 'string') {
-      body.price = parseFloat(body.price);
+    if (req.file) {
+      body.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
-    if (body.originalPrice && typeof body.originalPrice === 'string') {
-      body.originalPrice = parseFloat(body.originalPrice);
-    }
-    
-    // Convert soldOut string to boolean
-    if (body.soldOut !== undefined) {
-      if (typeof body.soldOut === 'string') {
-        body.soldOut = body.soldOut === 'true';
-      }
-    }
-    
-    // Convert stock string to number
-    if (body.stock !== undefined) {
-      if (typeof body.stock === 'string') {
-        body.stock = parseInt(body.stock) || 0;
-      }
-    }
-    
-    // Handle image uploads - Convert to Base64
-    if (req.files && req.files.image && req.files.image.length > 0) {
-      const imageUrls = req.files.image.map(file => {
-        const b64 = file.buffer.toString('base64');
-        return `data:${file.mimetype};base64,${b64}`;
-      });
-      body.images = imageUrls;
-      body.image = imageUrls[0];
-    }
-    
-    // Handle video uploads and URLs
-    let videos = [];
-    
-    // Add uploaded video files - Convert to Base64
-    if (req.files && req.files.videos_file && req.files.videos_file.length > 0) {
-      const videoUrls = req.files.videos_file.map(file => {
-        const b64 = file.buffer.toString('base64');
-        return `data:${file.mimetype};base64,${b64}`;
-      });
-      videos = [...videos, ...videoUrls];
-    }
-    
-    // Parse and add video URLs from request body
-    if (req.body.videos) {
-      try {
-        let parsedVideos = [];
-        if (typeof req.body.videos === 'string') {
-          parsedVideos = JSON.parse(req.body.videos);
-        } else if (Array.isArray(req.body.videos)) {
-          parsedVideos = req.body.videos;
-        }
-        
-        // Filter out placeholder file references
-        const urlVideos = parsedVideos.filter((v) => v && !v.startsWith('__file_'));
-        videos = [...videos, ...urlVideos];
-      } catch (e) {
-        console.warn('Error parsing videos:', e.message);
-      }
-    }
-    
-    // Set videos if any exist
-    if (videos.length > 0) {
-      body.videos = videos;
-    }
-    
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
-    if (!updated) return res.status(404).json({ error: 'Product not found' });
-    console.log('Product updated:', updated);
+    if (!updated) return res.status(404).json({ error: 'Not found' });
     res.json(updated);
   } catch (err) {
-    console.error('PUT /api/products/:id error:', err.message);
+    console.error('PUT /api/products/:id error:', err);
     res.status(500).json({ error: err.message });
   }
 });

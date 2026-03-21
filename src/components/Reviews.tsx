@@ -105,8 +105,7 @@ const Reviews = () => {
               {reviews.map((review, index) => (
                 <div
                   key={review.id}
-                  className={`glass-card-sapphire p-8 rounded-2xl backdrop-blur-xl border border-teal-luxury/40 transition-all duration-300 shadow-glow-emerald ${
-
+                  className={`glass-card-sapphire p-8 rounded-2xl backdrop-blur-xl border border-sapphire-luxury/40 transition-all duration-300 shadow-glow-sapphire ${
                     index === currentReviewIndex ? 'lg:col-span-2 lg:row-span-1 shadow-glow' : 'opacity-50 lg:opacity-100'
                   }`}
                 >

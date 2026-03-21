@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
@@ -11,16 +10,14 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-1">
             <div className="mb-8">
-              <img 
-                src="/logo.png" 
-                alt="MORAA Logo" 
-                className="h-24 w-auto mb-6 object-contain"
-              />
-              <p className="text-platinum/70 text-sm leading-relaxed">
-                Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
-              </p>
+              <div className="text-2xl luxury-serif text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold tracking-widest mb-2">
+                  ✨ MYRA ✨
+                </div>
+                <p className="text-platinum/70 text-sm leading-relaxed">
+                  Luxury jewelry for the modern connoisseur. Timeless elegance, modern craftsmanship.
+                </p>
             </div>
-
+            
             <div className="space-y-4 mb-8">
               <div className="flex items-start gap-3">
                 <span className="text-emerald-luxury text-lg">✓</span>
@@ -41,29 +38,25 @@ const Footer = () => {
           <div className="col-span-1">
             <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">COLLECTIONS</h4>
             <ul className="space-y-4">
-              <li><Link to="/earrings" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Earrings</Link></li>
-              <li><Link to="/necklaces" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Necklaces</Link></li>
-              <li><Link to="/bracelets" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Bracelets</Link></li>
-              <li><Link to="/products" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">New Arrivals</Link></li>
-              <li><Link to="/products" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Limited Edition</Link></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Earrings</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Necklaces</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Bracelets</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">New Arrivals</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Limited Edition</a></li>
             </ul>
           </div>
-
 
           {/* Information */}
           <div className="col-span-1">
             <h4 className="luxury-serif text-gold-primary text-sm tracking-widest mb-8">INFORMATION</h4>
             <ul className="space-y-4">
-              <li><Link to="/about-us" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">About Us</Link></li>
-              <li><Link to="/privacy-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Privacy Policy</Link></li>
-              <li><Link to="/shipping-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Shipping Policy</Link></li>
-              <li><Link to="/refund-policy" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Refund Policy</Link></li>
-              <li><Link to="/jewellery-care-guide" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Jewellery Care</Link></li>
-              <li><Link to="/terms-conditions" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Terms & Conditions</Link></li>
-              <li><Link to="/faq" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">FAQ</Link></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">About Us</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Privacy Policy</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Shipping Policy</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Terms & Conditions</a></li>
+              <li><a href="#" className="text-platinum/70 text-sm hover:text-gold-primary transition-all duration-300">Returns & Exchanges</a></li>
             </ul>
           </div>
-
 
           {/* Newsletter */}
           <div className="col-span-1">
@@ -71,7 +64,7 @@ const Footer = () => {
             <p className="text-platinum/70 text-sm mb-6 leading-relaxed">
               Subscribe for exclusive previews, private sales, and curated collection updates.
             </p>
-
+            
             <form className="space-y-3">
               <input
                 type="email"
@@ -99,21 +92,21 @@ const Footer = () => {
               <Mail className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">EMAIL</p>
-                <p className="text-platinum text-sm">moraajewel@gmail.com</p>
+                <p className="text-platinum text-sm">hello@myrajewelry.com</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <Phone className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">PHONE</p>
-                <p className="text-platinum text-sm">+91 78779 37350</p>
+                <p className="text-platinum text-sm">+1 (555) 123-4567</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <MapPin className="h-5 w-5 text-gold-primary flex-shrink-0 mt-1" />
               <div>
                 <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-2">LOCATION</p>
-                <p className="text-platinum text-sm">Pahadiya chowk, Jaipur 302002</p>
+                <p className="text-platinum text-sm">New York, NY 10001</p>
               </div>
             </div>
           </div>
@@ -124,37 +117,37 @@ const Footer = () => {
           <p className="text-platinum/50 text-xs tracking-widest luxury-serif mb-6 text-center">ACCEPTED PAYMENT METHODS</p>
           <div className="flex flex-wrap items-center justify-center gap-6 opacity-70 hover:opacity-100 transition-opacity">
             {/* Visa */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png"
-              alt="Visa"
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" 
+              alt="Visa" 
               className="h-6 object-contain filter brightness-0 invert"
             />
-
+            
             {/* Mastercard */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png"
-              alt="Mastercard"
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" 
+              alt="Mastercard" 
               className="h-6 object-contain filter brightness-0 invert"
             />
-
+            
             {/* PayPal */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png"
-              alt="PayPal"
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" 
+              alt="PayPal" 
               className="h-6 object-contain filter brightness-0 invert"
             />
-
+            
             {/* Google Pay */}
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png"
-              alt="Google Pay"
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png" 
+              alt="Google Pay" 
               className="h-6 object-contain filter brightness-0 invert"
             />
-
+            
             {/* Razorpay */}
-            <img
-              src="https://razorpay.com/assets/razorpay-logo.svg"
-              alt="Razorpay"
+            <img 
+              src="https://razorpay.com/assets/razorpay-logo.svg" 
+              alt="Razorpay" 
               className="h-6 object-contain filter brightness-0 invert"
             />
           </div>
@@ -163,14 +156,13 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-gold-primary/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-platinum/50 text-xs">
-            © 2024 Moraa Jewelry. All rights reserved.
+            © 2024 MYRA Luxury Jewelry. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link to="/privacy-policy" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</Link>
-            <Link to="/terms-conditions" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Terms</Link>
-            <Link to="/accessibility" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Accessibility</Link>
+            <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Privacy</a>
+            <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Terms</a>
+            <a href="#" className="text-platinum/50 text-xs hover:text-gold-primary transition-all duration-300">Accessibility</a>
           </div>
-
         </div>
       </div>
     </footer>

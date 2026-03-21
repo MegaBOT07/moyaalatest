@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { products as seedProducts, Product as SeedProduct } from '../data/products';
 import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
 
 export interface Product {
@@ -18,8 +17,6 @@ export interface Product {
   dimensions?: string;
   weight?: string;
   careInstructions?: string[];
-  averageRating?: number;
-  reviewCount?: number;
 }
 
 export interface Video {
@@ -105,7 +102,7 @@ const initialState: AppState = {
   searchQuery: '',
   searchResults: [],
   isSearchOpen: false,
-  products: seedProducts as Product[],
+  products: [],
   videos: [],
   banners: [],
   coupons: [],
@@ -122,9 +119,9 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'ADD_PRODUCT':
       return { ...state, products: [...state.products, action.payload] };
     case 'UPDATE_PRODUCT':
-      return { ...state, products: state.products.map(p => p.id === action.payload.id ? action.payload : p) };
+      return { ...state, products: state.products.map(p => (p.id === action.payload.id || (p as any)._id === (action.payload as any)._id) ? action.payload : p) };
     case 'REMOVE_PRODUCT':
-      return { ...state, products: state.products.filter(p => p.id !== action.payload) };
+      return { ...state, products: state.products.filter(p => p.id !== action.payload && (p as any)._id !== action.payload) };
     case 'SET_VIDEOS':
       return { ...state, videos: action.payload };
     case 'ADD_VIDEO':
@@ -230,78 +227,82 @@ const AppContext = createContext<{
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Fetch from MongoDB backend on mount - with seed data fallback
+  // Persist admin-managed state to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('rr_products', JSON.stringify(state.products));
+      localStorage.setItem('rr_videos', JSON.stringify(state.videos));
+      localStorage.setItem('rr_banners', JSON.stringify(state.banners));
+      localStorage.setItem('rr_coupons', JSON.stringify(state.coupons));
+      if (state.user) localStorage.setItem('rr_user', JSON.stringify(state.user));
+      else localStorage.removeItem('rr_user');
+    } catch (e) {
+      // ignore
+    }
+  }, [state.products, state.videos, state.banners, state.coupons, state.user]);
+
+  // Hydrate from localStorage on mount
   useEffect(() => {
     let mounted = true;
     const hydrate = async () => {
-      // Restore user from localStorage
+      // try backend first
       try {
-        const rawUser = localStorage.getItem('rr_user');
-        if (rawUser && mounted) {
-          dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
+        const health = await fetch(API_ENDPOINTS.HEALTH);
+        if (health.ok) {
+          const [prodRes, vidRes, banRes, coupRes] = await Promise.all([
+            fetch(API_ENDPOINTS.PRODUCTS),
+            fetch(API_ENDPOINTS.VIDEOS),
+            fetch(API_ENDPOINTS.BANNERS),
+            fetch(API_ENDPOINTS.COUPONS),
+          ]);
+          if (prodRes.ok) {
+            const prods = await prodRes.json();
+            if (mounted) dispatch({ type: 'SET_PRODUCTS', payload: prods });
+          }
+          if (vidRes.ok) {
+            const vids = await vidRes.json();
+            if (mounted) dispatch({ type: 'SET_VIDEOS', payload: vids });
+          }
+          if (banRes.ok) {
+            const bans = await banRes.json();
+            if (mounted) dispatch({ type: 'SET_BANNERS', payload: bans });
+          }
+          if (coupRes.ok) {
+            const coups = await coupRes.json();
+            if (mounted) dispatch({ type: 'SET_COUPONS', payload: coups });
+          }
+
+          // Restore user from localStorage even if backend is healthy
+          try {
+            const rawUser = localStorage.getItem('rr_user');
+            if (rawUser && mounted) dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
+          } catch (e) {}
+
+          return;
         }
       } catch (e) {
-        // ignore
+        // backend not available, fall back to localStorage
       }
 
-      // Try to fetch from MongoDB backend
       try {
-        const [prodRes, vidRes, banRes, coupRes] = await Promise.all([
-          fetch(API_ENDPOINTS.PRODUCTS),
-          fetch(API_ENDPOINTS.VIDEOS),
-          fetch(API_ENDPOINTS.BANNERS),
-          fetch(API_ENDPOINTS.COUPONS),
-        ]);
-        
-        let hasBackendData = false;
-        
-        if (prodRes.ok) {
-          const prods = await prodRes.json();
-          if (mounted && prods && prods.length > 0) {
-            dispatch({ type: 'SET_PRODUCTS', payload: prods });
-            hasBackendData = true;
-          }
-        }
-        
-        if (vidRes.ok) {
-          const vids = await vidRes.json();
-          if (mounted) dispatch({ type: 'SET_VIDEOS', payload: vids });
-        }
-        if (banRes.ok) {
-          const bans = await banRes.json();
-          if (mounted) dispatch({ type: 'SET_BANNERS', payload: bans });
-        }
-        if (coupRes.ok) {
-          const coups = await coupRes.json();
-          if (mounted) dispatch({ type: 'SET_COUPONS', payload: coups });
-        }
-
-        // If no backend products, keep showing seed data
-        if (!hasBackendData && mounted) {
-          console.warn('Backend returned no products, keeping seed data');
-        }
+        const rawProducts = localStorage.getItem('rr_products');
+        if (rawProducts && mounted) dispatch({ type: 'SET_PRODUCTS', payload: JSON.parse(rawProducts) });
+        const rawVideos = localStorage.getItem('rr_videos');
+        if (rawVideos && mounted) dispatch({ type: 'SET_VIDEOS', payload: JSON.parse(rawVideos) });
+        const rawBanners = localStorage.getItem('rr_banners');
+        if (rawBanners && mounted) dispatch({ type: 'SET_BANNERS', payload: JSON.parse(rawBanners) });
+        const rawCoupons = localStorage.getItem('rr_coupons');
+        if (rawCoupons && mounted) dispatch({ type: 'SET_COUPONS', payload: JSON.parse(rawCoupons) });
+        const rawUser = localStorage.getItem('rr_user');
+        if (rawUser && mounted) dispatch({ type: 'SET_USER', payload: JSON.parse(rawUser) });
       } catch (e) {
-        console.error('Failed to fetch from backend:', e);
-        // Keep showing seed data as fallback
-        console.log('Using seed data as fallback');
+        // ignore
       }
     };
     hydrate();
     return () => { mounted = false; };
+     
   }, []);
-
-  // Only persist user to localStorage, NOT products/videos/banners/coupons
-  useEffect(() => {
-    try {
-      if (state.user) {
-        localStorage.setItem('rr_user', JSON.stringify(state.user));
-      } else {
-        localStorage.removeItem('rr_user');
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, [state.user]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

@@ -53,8 +53,7 @@ const NewArrivals = () => {
                 <div key={(product as any)._id || product.id} className="group cursor-pointer">
                   <Link to={`/product/${product.id}`}>
                     {/* Product card */}
-                    <div className="relative overflow-hidden rounded-xl glass-card-emerald border border-teal-luxury/40 aspect-square mb-6 hover:border-gold-primary/60 transition-all duration-300 shadow-glow-emerald hover:shadow-glow">
-
+                    <div className="relative overflow-hidden rounded-xl glass-card-emerald border border-emerald-luxury/40 aspect-square mb-6 hover:border-gold-primary/60 transition-all duration-300 shadow-glow-emerald hover:shadow-glow">
                       {/* Sale badge */}
                       {product.sale && (
                         <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark px-3 py-1.5 text-xs font-semibold rounded-full z-10 luxury-serif shadow-glow-gold">

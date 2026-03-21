@@ -30,8 +30,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-luxury-dark/70 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="glass-card-emerald border border-teal-luxury/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-emerald">
-
+      <div className="glass-card-emerald border border-emerald-luxury/40 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-glow-emerald">
         <div className="flex items-center justify-between p-6 border-b border-emerald-luxury/30">
           <h2 className="text-2xl font-bold text-gold-primary luxury-serif">Shopping Cart</h2>
           <button
