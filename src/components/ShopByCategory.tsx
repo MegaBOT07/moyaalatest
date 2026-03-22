@@ -5,19 +5,19 @@ const ShopByCategory = () => {
   const categories = [
     {
       name: 'EARRINGS',
-      image: 'https://images.pexels.com/photos/1191536/pexels-photo-1191536.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/earrings.png',
       link: '/earrings',
       description: 'Delicate elegance for every moment'
     },
     {
       name: 'BRACELETS',
-      image: 'https://images.pexels.com/photos/1617067/pexels-photo-1617067.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/bracalate.png',
       link: '/bracelets',
       description: 'Wrist adornments of refined taste'
     },
     {
       name: 'NECKLACES',
-      image: 'https://images.pexels.com/photos/1449667/pexels-photo-1449667.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/nacklace.jpeg',
       link: '/necklaces',
       description: 'Statement pieces that define elegance'
     }
@@ -30,7 +30,7 @@ const ShopByCategory = () => {
         <div className="text-center mb-20">
           <div className="inline-block mb-6">
             <div className="text-gold-primary text-sm tracking-widest font-light luxury-serif">
-              ✨ CURATED COLLECTIONS ✨
+              CURATED COLLECTIONS
             </div>
           </div>
           <h2 className="luxury-serif text-5xl md:text-6xl text-platinum mb-6 leading-tight">
@@ -46,23 +46,24 @@ const ShopByCategory = () => {
         {/* Category cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <Link 
+            <Link
               key={category.name}
               to={category.link}
               className="group relative overflow-hidden rounded-2xl cursor-pointer"
             >
               {/* Card container */}
-              <div className="aspect-[4/5] relative glass-card-ruby border border-ruby-luxury/40 rounded-2xl overflow-hidden shadow-glow-ruby hover:shadow-glow transition-all duration-300">
+              <div className="aspect-square md:aspect-[4/5] relative glass-card-ruby border border-primary-wine/40 rounded-2xl overflow-hidden shadow-glow-ruby hover:shadow-glow transition-all duration-300">
+
                 {/* Background image */}
                 <img
                   src={category.image}
                   alt={category.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                
+
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-luxury-dark/90 via-luxury-dark/30 to-transparent group-hover:from-luxury-dark/70 transition-all duration-300" />
-                
+
                 {/* Decorative corner accent */}
                 <div className="absolute top-6 right-6 w-12 h-12 border border-gold-primary/40 rounded transition-all duration-300 group-hover:border-gold-primary/80 group-hover:w-16 group-hover:h-16 group-hover:shadow-glow-gold" />
 
@@ -77,7 +78,8 @@ const ShopByCategory = () => {
                 </div>
 
                 {/* Soft glow effect on hover */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 shadow-glow-sapphire rounded-2xl pointer-events-none" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 shadow-glow-emerald rounded-2xl pointer-events-none" />
+
               </div>
             </Link>
           ))}

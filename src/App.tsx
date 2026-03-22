@@ -14,13 +14,24 @@ import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import ProductDetail from './pages/ProductDetail';
 import Admin from './pages/Admin';
+import EditProduct from './pages/EditProduct';
+import Profile from './pages/Profile';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import RefundPolicy from './pages/RefundPolicy';
+import ShippingPolicy from './pages/ShippingPolicy';
+import JewelleryCareGuide from './pages/JewelleryCareGuide';
+import AboutUs from './pages/AboutUs';
+import TermsConditions from './pages/TermsConditions';
+import FAQ from './pages/FAQ';
+import Accessibility from './pages/Accessibility';
+
 
 function App() {
   return (
     <AppProvider>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
-        <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary">
+        <div className="min-h-screen bg-gradient-to-b from-luxury-dark via-luxury-secondary to-luxury-tertiary overflow-x-hidden">
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -31,8 +42,19 @@ function App() {
             <Route path="/necklaces" element={<Necklaces />} />
             <Route path="/track-order" element={<TrackOrder />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/jewellery-care-guide" element={<JewelleryCareGuide />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/accessibility" element={<Accessibility />} />
           </Routes>
+
           <Footer />
           <SignInModal />
         </div>

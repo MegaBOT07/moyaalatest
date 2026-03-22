@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, TrendingUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showAddProduct, setShowAddProduct] = useState(false);
   const { state, dispatch } = useAppContext();
@@ -12,117 +14,273 @@ const Admin = () => {
 
   const stats = [
     { name: 'Total Products', value: state.products.length, icon: Package, color: 'bg-blue-500' },
-    { name: 'Total Orders', value: '156', icon: ShoppingBag, color: 'bg-green-500' },
-    { name: 'Total Customers', value: '89', icon: Users, color: 'bg-purple-500' },
-    { name: 'Revenue', value: '₹2,45,670', icon: TrendingUp, color: 'bg-brand' },
+    { name: 'Total Orders', value: '0', icon: ShoppingBag, color: 'bg-green-500' },
+    { name: 'Total Customers', value: '0', icon: Users, color: 'bg-purple-500' },
+    { name: 'Revenue', value: '₹0', icon: TrendingUp, color: 'bg-brand' },
   ];
 
-  const recentOrders = [
-    { id: 'ORD001', customer: 'Priya Sharma', product: 'Cherish Earring', amount: '₹799', status: 'Completed' },
-    { id: 'ORD002', customer: 'Rahul Kumar', product: 'Nova Kada', amount: '₹999', status: 'Processing' },
-    { id: 'ORD003', customer: 'Anita Singh', product: 'Classic Snake Necklace', amount: '₹1,299', status: 'Shipped' },
-    { id: 'ORD004', customer: 'Vikram Patel', product: 'Bold Bloom Earring', amount: '₹599', status: 'Pending' },
-  ];
+  const recentOrders: any[] = [];
 
-  const ProductForm = () => (
-    <div className="glass-card-sapphire border border-sapphire-luxury/40 p-6 rounded-lg shadow-glow-sapphire">
-      <h3 className="text-lg font-bold text-platinum mb-4">Add New Product</h3>
-      <form className="space-y-4" onSubmit={async (e) => {
-        e.preventDefault();
-        const form = e.target as HTMLFormElement;
-        const fd = new FormData(form);
-        try {
-          const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
-          if (!res.ok) throw new Error('Create failed');
-          const created = await res.json();
-          dispatch({ type: 'ADD_PRODUCT', payload: created });
-        } catch (err) {
-          // fallback to local add
-          const fdobj: any = {};
-          fd.forEach((v, k) => { fdobj[k] = v; });
-          const newId = Math.max(0, ...state.products.map(p => p.id)) + 1;
-          const newProduct = { id: newId, name: fdobj.name || 'New Product', category: fdobj.category || 'earrings', price: Number(fdobj.price) || 0, originalPrice: fdobj.originalPrice ? Number(fdobj.originalPrice) : undefined, image: 'https://via.placeholder.com/400', description: fdobj.description || '' } as any;
-          dispatch({ type: 'ADD_PRODUCT', payload: newProduct });
-        }
-        setShowAddProduct(false);
-      }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  const ProductForm = () => {
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [previewImages, setPreviewImages] = useState<string[]>([]);
+    const [videoFiles, setVideoFiles] = useState<File[]>([]);
+    const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
+    const [soldOut, setSoldOut] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      setImageFiles(files);
+      const previews = files.map(file => URL.createObjectURL(file));
+      setPreviewImages(previews);
+      setError('');
+    };
+
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      setVideoFiles(files);
+    };
+
+    return (
+      <div className="glass-card-sapphire border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+
+        <h3 className="text-lg font-bold text-platinum mb-4">Add New Product</h3>
+        {error && (
+          <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+            {error}
+          </div>
+        )}
+        <form className="space-y-4" onSubmit={async (e) => {
+          e.preventDefault();
+          setIsLoading(true);
+          setError('');
+          
+          const form = e.target as HTMLFormElement;
+          const fd = new FormData(form);
+          
+          // Remove default image field from FormData
+          fd.delete('image');
+          
+          // Explicitly append image files from state
+          imageFiles.forEach((file) => {
+            fd.append('image', file);
+          });
+          
+          // Handle video files
+          videoFiles.forEach((file) => {
+            fd.append('videos_file', file);
+          });
+          
+          // Collect video URLs (only non-empty ones)
+          // Collect video URLs (only non-empty ones)
+          const validUrls = videoUrls.filter(url => url.trim());
+          if (validUrls.length > 0 || videoFiles.length > 0) {
+            const finalVideos = [...validUrls, ...videoFiles.map((_, i) => `__file_${i}__`)];
+            fd.append('videos', JSON.stringify(finalVideos));
+          }
+
+          // Add soldOut status
+          fd.append('soldOut', String(soldOut));
+          
+          try {
+            const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
+            if (!res.ok) {
+              let message = 'Create failed';
+              try {
+                const payload = await res.json();
+                message = payload?.error || payload?.message || message;
+              } catch {
+                // Keep fallback message if response is not JSON
+              }
+              throw new Error(message);
+            }
+            const created = await res.json();
+            dispatch({ type: 'ADD_PRODUCT', payload: created });
+            alert('✅ Product added successfully!');
+          } catch (err) {
+            console.error('API error:', err);
+            const message = err instanceof Error ? err.message : 'Failed to add product';
+            alert(`❌ Error adding product: ${message}`);
+            setError(message);
+          } finally {
+            setIsLoading(false);
+          }
+          setShowAddProduct(false);
+          setImageFiles([]);
+          setPreviewImages([]);
+          setVideoFiles([]);
+          setVideoUrls(['', '']);
+          setError('');
+        }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="product-name" className="block text-sm font-medium text-platinum mb-2">Product Name</label>
+              <input
+                id="product-name"
+                name="name"
+                type="text"
+                autoComplete="off"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                placeholder="Enter product name"
+              />
+            </div>
+            <div>
+              <label htmlFor="product-category" className="block text-sm font-medium text-platinum mb-2">Category</label>
+              <select id="product-category" name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
+                <option value="">Select category</option>
+                <option value="earrings">Earrings</option>
+                <option value="bracelets">Bracelets</option>
+                <option value="necklaces">Necklaces</option>
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="product-price" className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
+              <input
+                id="product-price"
+                name="price"
+                type="number"
+                autoComplete="off"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                placeholder="0"
+              />
+            </div>
+            <div>
+              <label htmlFor="product-original-price" className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
+              <input
+                id="product-original-price"
+                name="originalPrice"
+                type="number"
+                autoComplete="off"
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+                placeholder="0"
+              />
+            </div>
+          </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Product Name</label>
-            <input
-              name="name"
-              type="text"
+            <label className="block text-sm font-medium text-platinum mb-2">Description</label>
+            <textarea
+              name="description"
+              rows={4}
               className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-              placeholder="Enter product name"
+              placeholder="Enter product description"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Category</label>
-            <select name="category" className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none">
-              <option value="">Select category</option>
-              <option value="earrings">Earrings</option>
-              <option value="bracelets">Bracelets</option>
-              <option value="necklaces">Necklaces</option>
-            </select>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Price (₹)</label>
+            <label className="block text-sm font-medium text-platinum mb-2">Product Images (Multiple)</label>
             <input
-              name="price"
-              type="number"
+              name="image"
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
               className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-              placeholder="0"
             />
+            {previewImages.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm text-platinum/70 mb-2">Selected images ({previewImages.length}):</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {previewImages.map((preview, idx) => (
+                    <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-sapphire-luxury/40" />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-platinum mb-2">Original Price (₹)</label>
-            <input
-              name="originalPrice"
-              type="number"
-              className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-              placeholder="0"
-            />
+            <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 - Upload or URLs)</label>
+            <p className="text-xs text-platinum/60 mb-3">You can upload video files (MP4, WebM) OR paste URLs (YouTube, Vimeo, or direct video links)</p>
+            
+            {/* Video File Upload */}
+            <div className="mb-4">
+              <label className="block text-sm text-platinum/80 mb-2">Upload Video Files</label>
+              <input
+                type="file"
+                multiple
+                accept="video/*"
+                onChange={handleVideoChange}
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              />
+              {videoFiles.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {videoFiles.map((file, idx) => (
+                    <p key={idx} className="text-xs text-gold-primary">✓ {file.name}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Video URLs */}
+            <div className="space-y-2">
+              <label className="block text-sm text-platinum/80">Or Add Video URLs</label>
+              <input
+                type="text"
+                placeholder="Video 1 URL (YouTube, Vimeo, or MP4 link)"
+                value={videoUrls[0]}
+                onChange={(e) => {
+                  const newUrls = [...videoUrls];
+                  newUrls[0] = e.target.value;
+                  setVideoUrls(newUrls);
+                }}
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Video 2 URL (optional)"
+                value={videoUrls[1]}
+                onChange={(e) => {
+                  const newUrls = [...videoUrls];
+                  newUrls[1] = e.target.value;
+                  setVideoUrls(newUrls);
+                }}
+                className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-platinum mb-2">Description</label>
-          <textarea
-            name="description"
-            rows={4}
-            className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-            placeholder="Enter product description"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-platinum mb-2">Product Images</label>
-          <input
-            name="image"
-            type="file"
-            multiple
-            accept="image/*"
-            className="w-full px-3 py-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded-lg text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 focus:border-transparent outline-none"
-          />
-        </div>
-        <div className="flex space-x-4">
-          <button
-            type="submit"
-            className="btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow-gold transition-all"
-          >
-            Add Product
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowAddProduct(false)}
-            className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-2 text-platinum cursor-pointer">
+              <input
+                type="checkbox"
+                checked={soldOut}
+                onChange={e => setSoldOut(e.target.checked)}
+                className="rounded border-sapphire-luxury accent-gold-primary"
+              />
+              <span>Sold Out</span>
+            </label>
+          </div>
+          <div className="flex space-x-4">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-premium-gold text-luxury-dark px-6 py-2 rounded-lg hover:shadow-glow-gold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? '⏳ Adding...' : 'Add Product'}
+            </button>
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={() => { 
+                setShowAddProduct(false); 
+                setImageFiles([]);
+                setPreviewImages([]); 
+                setVideoFiles([]); 
+                setVideoUrls(['', '']); 
+                setSoldOut(false);
+                setError('');
+              }}
+              className="bg-luxury-secondary text-platinum px-6 py-2 rounded-lg border border-teal-luxury/30 hover:shadow-glow-emerald transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  };
 
   const VideoManager: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -148,20 +306,20 @@ const Admin = () => {
     return (
       <div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-          <input 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            placeholder="Title" 
-            className="p-2 bg-luxury-secondary border border-emerald-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-emerald-luxury/60 outline-none" 
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
           />
-          <input 
-            value={url} 
-            onChange={(e) => setUrl(e.target.value)} 
-            placeholder="Video URL" 
-            className="p-2 bg-luxury-secondary border border-emerald-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-emerald-luxury/60 outline-none" 
+          <input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Video URL"
+            className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
           />
-          <button 
-            onClick={addVideo} 
+          <button
+            onClick={addVideo}
             className="btn-premium-gold text-luxury-dark px-4 rounded hover:shadow-glow-gold transition-all"
           >
             Add Video
@@ -169,14 +327,14 @@ const Admin = () => {
         </div>
         <div className="space-y-2">
           {state.videos.map((v, i) => (
-            <div key={(v as any)._id || v.id || i} className="flex justify-between items-center p-2 bg-luxury-secondary border border-emerald-luxury/20 rounded">
+            <div key={(v as any)._id || v.id || i} className="flex justify-between items-center p-2 bg-luxury-secondary border border-teal-luxury/20 rounded">
               <div>
                 <div className="font-medium text-platinum">{v.title}</div>
                 <div className="text-sm text-platinum/60 truncate max-w-md">{v.url}</div>
               </div>
               <div className="flex space-x-2">
-                <a href={v.url} target="_blank" rel="noreferrer" className="text-gold-primary hover:text-rose-gold transition-colors">Open</a>
-                <button 
+                <a href={v.url} target="_blank" rel="noreferrer" className="text-gold-primary hover:text-gold-soft transition-colors">Open</a>
+                <button
                   onClick={async () => {
                     try {
                       const videoAny = v as any;
@@ -186,8 +344,8 @@ const Admin = () => {
                     } catch (e) {
                       dispatch({ type: 'REMOVE_VIDEO', payload: v.id });
                     }
-                  }} 
-                  className="text-ruby-luxury hover:text-rose-gold transition-colors"
+                  }}
+                  className="text-primary-wine hover:text-gold-soft transition-colors"
                 >
                   Delete
                 </button>
@@ -200,58 +358,121 @@ const Admin = () => {
   };
 
   const EditProductModal: React.FC = () => {
-    const [form, setForm] = useState<any>(editProduct || {});
+    const [localForm, setLocalForm] = useState<any>(null);
+    const [previewImages, setPreviewImages] = useState<string[]>([]);
+    const [videoFiles, setVideoFiles] = useState<File[]>([]);
+    const [videoUrls, setVideoUrls] = useState<string[]>(['', '']);
 
-    React.useEffect(() => setForm(editProduct || {}), [editProduct]);
+    // Sync localForm whenever editProduct or showEditModal changes
+    React.useEffect(() => {
+      if (showEditModal && editProduct) {
+        setLocalForm({
+          id: editProduct.id || editProduct._id,
+          name: editProduct.name || '',
+          category: editProduct.category || '',
+          price: editProduct.price || 0,
+          originalPrice: editProduct.originalPrice || '',
+          description: editProduct.description || '',
+          soldOut: editProduct.soldOut || false,
+          images: editProduct.images || [],
+          videos: editProduct.videos || []
+        });
+        setVideoUrls((editProduct?.videos && editProduct.videos.length > 0) ? editProduct.videos : ['', '']);
+      } else {
+        setLocalForm(null);
+      }
+    }, [showEditModal, editProduct]);
 
-    if (!showEditModal || !form) return null;
+    if (!showEditModal || !localForm) {
+      return null;
+    }
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      const previews = files.map(file => URL.createObjectURL(file));
+      setPreviewImages(previews);
+    };
+
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      setVideoFiles(files);
+    };
 
     const submit = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
         const fd = new FormData();
         // include fields from form state
-        Object.keys(form).forEach(k => {
-          if (form[k] !== undefined && form[k] !== null) fd.append(k, form[k]);
+        Object.keys(localForm).forEach(k => {
+          if (localForm[k] !== undefined && localForm[k] !== null && k !== 'images' && k !== 'image' && k !== 'videos') fd.append(k, localForm[k]);
         });
-        const url = `${API_ENDPOINTS.PRODUCTS}/${form.id}`;
+        
+        // Handle video files
+        videoFiles.forEach((file) => {
+          fd.append('videos_file', file);
+        });
+        
+        // Handle videos (URLs and file placeholders)
+        let finalVideos: string[] = [];
+        if (videoUrls && videoUrls.length > 0) {
+          finalVideos = videoUrls.filter(url => url && url.trim());
+        }
+        if (videoFiles.length > 0) {
+          finalVideos = [...finalVideos, ...videoFiles.map((_, i) => `__file_${i}__`)];
+        }
+        if (finalVideos.length > 0) {
+          fd.append('videos', JSON.stringify(finalVideos));
+        }
+        
+        // Handle image upload if new images were selected
+        const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"]') as HTMLInputElement;
+        if (fileInput?.files?.length) {
+          Array.from(fileInput.files).forEach(file => {
+            fd.append('image', file);
+          });
+        }
+        
+        const url = `${API_ENDPOINTS.PRODUCTS}/${localForm.id}`;
         const res = await fetch(url, { method: 'PUT', body: fd });
         if (!res.ok) throw new Error('Update failed');
         const updated = await res.json();
         dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
       } catch (err) {
         const updated = {
-          ...form,
-          id: form.id,
-          name: form.name,
-          category: form.category,
-          price: Number(form.price) || 0,
-          originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-          description: form.description || '',
-          soldOut: !!form.soldOut,
+          ...localForm,
+          id: localForm.id,
+          name: localForm.name,
+          category: localForm.category,
+          price: Number(localForm.price) || 0,
+          originalPrice: localForm.originalPrice ? Number(localForm.originalPrice) : undefined,
+          description: localForm.description || '',
+          soldOut: !!localForm.soldOut,
         };
         dispatch({ type: 'UPDATE_PRODUCT', payload: updated });
       }
       setShowEditModal(false);
       setEditProduct(null);
+      setPreviewImages([]);
     };
 
     return (
-      <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-sapphire">
-          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product</h3>
+      <div className="fixed inset-0 bg-luxury-dark/80 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto">
+        <div className="glass-card-teal border border-teal-luxury/40 rounded-lg p-6 w-full max-w-2xl shadow-glow-emerald my-8">
+
+          <h3 className="text-lg font-bold text-platinum mb-4">Edit Product - {localForm?.name || 'Loading...'}</h3>
           <form onSubmit={submit} className="space-y-4">
+            <p className="text-xs text-platinum/50">Product ID: {localForm?.id || localForm?._id}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.name || ''} 
-                onChange={e => setForm({...form, name: e.target.value})} 
+              <input
+                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                value={localForm?.name || ''}
+                onChange={e => setLocalForm({ ...localForm, name: e.target.value })}
                 placeholder="Product name"
               />
-              <select 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.category || ''} 
-                onChange={e => setForm({...form, category: e.target.value})}
+              <select
+                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                value={localForm?.category || ''}
+                onChange={e => setLocalForm({ ...localForm, category: e.target.value })}
               >
                 <option value="earrings">Earrings</option>
                 <option value="bracelets">Bracelets</option>
@@ -259,47 +480,142 @@ const Admin = () => {
               </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.price || 0} 
-                onChange={e => setForm({...form, price: e.target.value})} 
+              <input
+                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                value={localForm?.price || 0}
+                onChange={e => setLocalForm({ ...localForm, price: e.target.value })}
                 placeholder="Price"
               />
-              <input 
-                className="p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-                value={form.originalPrice || ''} 
-                onChange={e => setForm({...form, originalPrice: e.target.value})} 
+              <input
+                className="p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                value={localForm?.originalPrice || ''}
+                onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
                 placeholder="Original price"
               />
             </div>
-            <textarea 
-              className="w-full p-2 bg-luxury-secondary border border-sapphire-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-sapphire-luxury/60 outline-none" 
-              rows={4} 
-              value={form.description || ''} 
-              onChange={e => setForm({...form, description: e.target.value})} 
+            <textarea
+              className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+              rows={4}
+              value={localForm?.description || ''}
+              onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
               placeholder="Description"
             />
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Current Images</label>
+              {(localForm?.images && localForm.images.length > 0) ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                  {localForm.images.map((img: string, idx: number) => (
+                    <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-teal-luxury/40" />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-platinum/50 mb-3">No images yet</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Update Images (Multiple)</label>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+              />
+              {previewImages.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-sm text-platinum/70 mb-2">New images ({previewImages.length}):</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {previewImages.map((preview, idx) => (
+                      <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-teal-luxury/40" />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-platinum mb-2">Product Videos (Max 2 - Upload or URLs)</label>
+              <p className="text-xs text-platinum/60 mb-3">Upload video files OR paste URLs</p>
+              
+              {/* Current Videos */}
+              {(localForm?.videos && localForm.videos.length > 0) && (
+                <div className="mb-4">
+                  <p className="text-sm text-platinum/80 mb-2">Current Videos:</p>
+                  <div className="space-y-1">
+                    {localForm.videos.map((vid: string, idx: number) => (
+                      <p key={idx} className="text-xs text-gold-primary">✓ {vid.substring(0, 50)}...</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Video File Upload */}
+              <div className="mb-4">
+                <label className="block text-sm text-platinum/80 mb-2">Upload New Video Files</label>
+                <input
+                  type="file"
+                  multiple
+                  accept="video/*"
+                  onChange={handleVideoChange}
+                  className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                />
+                {videoFiles.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {videoFiles.map((file, idx) => (
+                      <p key={idx} className="text-xs text-gold-primary">✓ {file.name}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Video URLs */}
+              <div className="space-y-2">
+                <label className="block text-sm text-platinum/80">Or Add Video URLs</label>
+                <input
+                  type="text"
+                  placeholder="Video 1 URL"
+                  value={videoUrls[0] || ''}
+                  onChange={e => {
+                    const newUrls = [...videoUrls];
+                    newUrls[0] = e.target.value;
+                    setVideoUrls(newUrls);
+                  }}
+                  className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Video 2 URL (optional)"
+                  value={videoUrls[1] || ''}
+                  onChange={e => {
+                    const newUrls = [...videoUrls];
+                    newUrls[1] = e.target.value;
+                    setVideoUrls(newUrls);
+                  }}
+                  className="w-full p-2 bg-luxury-secondary border border-teal-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
+                />
+              </div>
+            </div>
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2 text-platinum cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={!!form.soldOut} 
-                  onChange={e => setForm({...form, soldOut: e.target.checked})} 
-                  className="rounded border-sapphire-luxury accent-gold-primary"
-                /> 
+                <input
+                  type="checkbox"
+                  checked={!!localForm?.soldOut}
+                  onChange={e => setLocalForm({ ...localForm, soldOut: e.target.checked })}
+                  className="rounded border-teal-luxury accent-gold-primary"
+                />
                 <span>Sold Out</span>
               </label>
             </div>
             <div className="flex justify-end space-x-2">
-              <button 
-                type="button" 
-                onClick={() => { setShowEditModal(false); setEditProduct(null); }} 
-                className="px-4 py-2 bg-luxury-secondary text-platinum rounded border border-sapphire-luxury/30 hover:shadow-glow-sapphire transition-all"
+              <button
+                type="button"
+                onClick={() => { setShowEditModal(false); setEditProduct(null); setPreviewImages([]); setVideoFiles([]); setVideoUrls(['', '']); }}
+                className="px-4 py-2 bg-luxury-secondary text-platinum rounded border border-teal-luxury/30 hover:shadow-glow-emerald transition-all"
+
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="px-4 py-2 btn-premium-gold text-luxury-dark rounded hover:shadow-glow-gold transition-all"
               >
                 Save
@@ -332,16 +648,16 @@ const Admin = () => {
     return (
       <div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-          <input 
-            value={text} 
-            onChange={(e) => setText(e.target.value)} 
-            placeholder="Banner text" 
-            className="p-2 bg-luxury-secondary border border-ruby-luxury/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-ruby-luxury/60 outline-none col-span-3" 
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Banner text"
+            className="p-2 bg-luxury-secondary border border-primary-wine/30 rounded text-platinum placeholder-platinum/40 focus:ring-2 focus:ring-primary-wine/60 outline-none col-span-3"
           />
-          <select 
-            value={type} 
-            onChange={(e) => setType(e.target.value as any)} 
-            className="p-2 bg-luxury-secondary border border-ruby-luxury/30 rounded text-platinum focus:ring-2 focus:ring-ruby-luxury/60 outline-none"
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as any)}
+            className="p-2 bg-luxury-secondary border border-primary-wine/30 rounded text-platinum focus:ring-2 focus:ring-primary-wine/60 outline-none"
           >
             <option value="info">Info</option>
             <option value="hot">Hot</option>
@@ -350,8 +666,8 @@ const Admin = () => {
           </select>
         </div>
         <div className="flex space-x-2 mb-4">
-          <button 
-            onClick={addBanner} 
+          <button
+            onClick={addBanner}
             className="btn-premium-gold text-luxury-dark px-4 rounded hover:shadow-glow-gold transition-all"
           >
             Add Banner
@@ -365,33 +681,33 @@ const Admin = () => {
                 <div className="text-sm text-platinum/60">{b.type}</div>
               </div>
               <div className="flex space-x-2">
-                <button 
+                <button
                   onClick={() => {
                     if (i === 0) return;
                     const next = [...state.banners];
-                    const tmp = next[i-1];
-                    next[i-1] = next[i];
+                    const tmp = next[i - 1];
+                    next[i - 1] = next[i];
                     next[i] = tmp;
                     dispatch({ type: 'SET_BANNERS', payload: next });
-                  }} 
+                  }}
                   className="text-gold-primary hover:text-rose-gold transition-colors"
                 >
                   Up
                 </button>
-                <button 
+                <button
                   onClick={() => {
                     if (i === state.banners.length - 1) return;
                     const next = [...state.banners];
-                    const tmp = next[i+1];
-                    next[i+1] = next[i];
+                    const tmp = next[i + 1];
+                    next[i + 1] = next[i];
                     next[i] = tmp;
                     dispatch({ type: 'SET_BANNERS', payload: next });
-                  }} 
+                  }}
                   className="text-gold-primary hover:text-rose-gold transition-colors"
                 >
                   Down
                 </button>
-                <button 
+                <button
                   onClick={async () => {
                     try {
                       const bannerAny = b as any;
@@ -401,7 +717,7 @@ const Admin = () => {
                     } catch (e) {
                       dispatch({ type: 'REMOVE_BANNER', payload: b.id });
                     }
-                  }} 
+                  }}
                   className="text-ruby-luxury hover:text-rose-gold transition-colors"
                 >
                   Delete
@@ -503,11 +819,10 @@ const Admin = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-2 px-1 font-medium text-sm transition-all ${
-                  activeTab === tab.id
+                className={`py-2 px-1 font-medium text-sm transition-all ${activeTab === tab.id
                     ? 'border-b-2 border-gold-primary text-gold-primary'
                     : 'text-platinum/60 hover:text-gold-primary'
-                }`}
+                  }`}
               >
                 {tab.name}
               </button>
@@ -521,28 +836,28 @@ const Admin = () => {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat) => (
-                <div key={stat.name} className="glass-card-emerald border border-emerald-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+                <div key={stat.name} className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+
                   <div className="flex items-center">
-                    <div className={`bg-gradient-to-r ${
-                      stat.name === 'Total Products' ? 'from-emerald-luxury to-sapphire-luxury' :
-                      stat.name === 'Total Orders' ? 'from-gold-primary to-rose-gold' :
-                      stat.name === 'Total Customers' ? 'from-ruby-luxury to-amethyst-luxury' :
-                      'from-sapphire-luxury to-emerald-luxury'
-                    } p-3 rounded-lg shadow-glow`}>
+                    <div className={`bg-gradient-to-r ${stat.name === 'Total Products' ? 'from-emerald-luxury to-sapphire-luxury' :
+                        stat.name === 'Total Orders' ? 'from-gold-primary to-rose-gold' :
+                          stat.name === 'Total Customers' ? 'from-ruby-luxury to-amethyst-luxury' :
+                            'from-sapphire-luxury to-emerald-luxury'
+                      } p-3 rounded-lg shadow-glow`}>
                       <stat.icon className="h-6 w-6 text-platinum" />
                     </div>
                     <div className="ml-4">
                       <p className="text-sm font-medium text-platinum/70">{stat.name}</p>
                       <p className="text-2xl font-bold text-gold-primary">{stat.value}</p>
                     </div>
-                    <EditProductModal />
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Recent Orders */}
-            <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg shadow-glow-sapphire overflow-hidden">
+            <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+
               <div className="px-6 py-4 border-b border-sapphire-luxury/20 bg-luxury-secondary">
                 <h3 className="text-lg font-medium text-platinum">Recent Orders</h3>
               </div>
@@ -583,12 +898,11 @@ const Admin = () => {
                           {order.amount}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
-                            order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                            order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
-                            'bg-luxury-secondary text-platinum/70'
-                          }`}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
+                              order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
+                                order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
+                                  'bg-luxury-secondary text-platinum/70'
+                            }`}>
                             {order.status}
                           </span>
                         </td>
@@ -617,7 +931,8 @@ const Admin = () => {
 
             {showAddProduct && <ProductForm />}
 
-            <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg shadow-glow-sapphire overflow-hidden">
+            <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-sapphire-luxury/20">
                   <thead className="bg-luxury-secondary border-b border-sapphire-luxury/20">
@@ -661,10 +976,8 @@ const Admin = () => {
                           ₹{product.price.toLocaleString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            product.soldOut ? 'bg-gradient-to-r from-ruby-luxury to-amethyst-luxury text-platinum' : 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum'
-                          }`}>
-                            {product.soldOut ? 'Sold Out' : 'In Stock'}
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${product.soldOut ? 'bg-red-500/20 text-red-300 border border-red-500/50' : 'bg-emerald-luxury/20 text-emerald-luxury border border-emerald-luxury/50'}`}>
+                            {product.soldOut ? 'Sold Out' : 'Available'}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -674,8 +987,8 @@ const Admin = () => {
                             </button>
                             <button
                               onClick={() => {
-                                setEditProduct(product);
-                                setShowEditModal(true);
+                                const productId = (product as any)._id || product.id;
+                                navigate(`/admin/edit-product/${productId}`);
                               }}
                               className="text-sapphire-luxury hover:text-emerald-luxury transition-colors"
                             >
@@ -711,17 +1024,20 @@ const Admin = () => {
         {activeTab === 'content' && (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass-card-emerald border border-emerald-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+              <div className="glass-card-emerald border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+
                 <h3 className="text-lg font-medium text-platinum mb-4">Video Showcase</h3>
                 <VideoManager />
               </div>
-              <div className="glass-card-ruby border border-ruby-luxury/40 p-6 rounded-lg shadow-glow-ruby">
+              <div className="glass-card-ruby border border-primary-wine/40 p-6 rounded-lg shadow-glow-ruby">
+
                 <h3 className="text-lg font-medium text-platinum mb-4">Banners & Tags</h3>
                 <BannerManager />
               </div>
             </div>
 
-            <div className="glass-card-sapphire border border-sapphire-luxury/40 p-6 rounded-lg shadow-glow-sapphire">
+            <div className="glass-card-sapphire border border-teal-luxury/40 p-6 rounded-lg shadow-glow-emerald">
+
               <h3 className="text-lg font-medium text-platinum mb-4">Coupons</h3>
               <CouponManager />
             </div>
@@ -730,7 +1046,8 @@ const Admin = () => {
 
         {/* Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="glass-card-sapphire border border-sapphire-luxury/40 rounded-lg shadow-glow-sapphire overflow-hidden">
+          <div className="glass-card-sapphire border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+
             <div className="px-6 py-4 border-b border-sapphire-luxury/20 bg-luxury-secondary">
               <h3 className="text-lg font-medium text-platinum">All Orders</h3>
             </div>
@@ -774,12 +1091,11 @@ const Admin = () => {
                         {order.amount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
-                          order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
-                          order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
-                          'bg-luxury-secondary text-platinum/70'
-                        }`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'Completed' ? 'bg-gradient-to-r from-emerald-luxury to-sapphire-luxury text-platinum' :
+                            order.status === 'Processing' ? 'bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark font-bold' :
+                              order.status === 'Shipped' ? 'bg-gradient-to-r from-sapphire-luxury to-gold-primary text-platinum' :
+                                'bg-luxury-secondary text-platinum/70'
+                          }`}>
                           {order.status}
                         </span>
                       </td>
@@ -803,7 +1119,8 @@ const Admin = () => {
 
         {/* Customers Tab */}
         {activeTab === 'customers' && (
-          <div className="glass-card-emerald border border-emerald-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+          <div className="glass-card-emerald border border-teal-luxury/40 rounded-lg shadow-glow-emerald overflow-hidden">
+
             <div className="px-6 py-4 border-b border-emerald-luxury/20 bg-luxury-secondary">
               <h3 className="text-lg font-medium text-platinum">Customer Management</h3>
             </div>
@@ -812,6 +1129,9 @@ const Admin = () => {
             </div>
           </div>
         )}
+
+        {/* Edit Product Modal - Rendered at top level */}
+        <EditProductModal />
       </div>
     </div>
   );

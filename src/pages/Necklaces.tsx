@@ -1,12 +1,49 @@
-import React from 'react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
+import { generateAggregateOfferSchema, generateBreadcrumbSchema } from '../utils/schemaGenerator';
+import { getImageUrl, handleImageError } from '../utils/mediaHelper';
 
 const Necklaces = () => {
   const { state, dispatch } = useAppContext();
 
   const necklaces = state.products.filter(p => p.category?.toLowerCase() === 'necklaces' || p.category?.toLowerCase() === 'necklace');
+
+  // Calculate price range for aggregate offer schema
+  const prices = necklaces.map(p => p.price || p.originalPrice || 0).filter(p => p > 0);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+  // Generate schemas
+  const aggregateSchema = generateAggregateOfferSchema(
+    'Premium Necklaces Collection - MORAA REFLECTION',
+    'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
+    'https://moraajewles.com/logo.png',
+    minPrice,
+    maxPrice,
+    necklaces.length,
+    'INR',
+    'https://moraajewles.com/necklaces'
+  );
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: 'https://moraajewles.com' },
+    { name: 'Products', url: 'https://moraajewles.com/products' },
+    { name: 'Necklaces', url: 'https://moraajewles.com/necklaces' }
+  ]);
+
+  useSEO({
+    title: 'Premium Necklaces Collection - MORAA REFLECTION Luxury Jewelry',
+    description: 'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
+    keywords: 'necklaces, luxury necklaces, premium necklaces, designer necklaces, jewelry necklaces, gold necklaces, diamond necklaces',
+    url: 'https://moraajewles.com/necklaces',
+    type: 'product.group',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@graph': [aggregateSchema, breadcrumbSchema]
+    }
+  });
 
   const toggleWishlist = (product: any) => {
     const isInWishlist = state.wishlist.find(item => item.id === product.id);
@@ -26,7 +63,8 @@ const Necklaces = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-4">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-gold-soft mb-4">
+
             NECKLACES
           </h1>
           <p className="text-gray-600">
@@ -45,7 +83,8 @@ const Necklaces = () => {
                 <div className="relative overflow-hidden rounded-lg bg-gray-50 border border-gold-primary/20 aspect-square mb-4\">
                   {/* Sale Badge */}
                   {product.sale && (
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-rose-gold text-luxury-dark px-3 py-1 text-sm font-medium rounded z-10 shadow-glow-gold">
+                    <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-primary to-gold-soft text-luxury-dark px-3 py-1 text-sm font-medium rounded z-10 shadow-glow-gold">
+
                       Sale
                     </div>
                   )}
@@ -60,9 +99,10 @@ const Necklaces = () => {
                   </button>
                   {/* Product Image */}
                   <img
-                    src={product.image}
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={handleImageError}
                   />
                   {/* Add to Cart Button */}
                   <button
